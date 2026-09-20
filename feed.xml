@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://live-robotics-uva.github.io/2026fa-learning-interactive-robots/feed.xml" rel="self" type="application/atom+xml"/><link href="https://live-robotics-uva.github.io/2026fa-learning-interactive-robots/" rel="alternate" type="text/html" hreflang="en"/><updated>2026-09-20T23:17:32+00:00</updated><id>https://live-robotics-uva.github.io/2026fa-learning-interactive-robots/feed.xml</id><title type="html">Learning for Interactive Robots</title><subtitle>Course website and student lecture reports for UVA Learning for Interactive Robots (Fall 2026). </subtitle><entry><title type="html">Safety, Trust</title><link href="https://live-robotics-uva.github.io/2026fa-learning-interactive-robots/blog/2026/safety-trust/" rel="alternate" type="text/html" title="Safety, Trust"/><published>2026-11-23T00:00:00+00:00</published><updated>2026-11-23T00:00:00+00:00</updated><id>https://live-robotics-uva.github.io/2026fa-learning-interactive-robots/blog/2026/safety-trust</id><content type="html" xml:base="https://live-robotics-uva.github.io/2026fa-learning-interactive-robots/blog/2026/safety-trust/"><![CDATA[<h2 id="introduction--motivation">Introduction &amp; Motivation</h2> <p>This lecture report synthesizes the core concepts, assigned readings, and classroom discussions for the <strong>Safety, Trust</strong> session in <em>Learning for Interactive Robots (CS 6501, Fall 2026)</em> at the University of Virginia.</p> <blockquote> <p><strong>Key takeaway</strong>: Control barrier functions, reachability analysis, human trust dynamics, and verifiable safe interaction in robotics.</p> </blockquote> <hr/> <h2 id="key-concepts--theoretical-foundations">Key Concepts &amp; Theoretical Foundations</h2> <p>In interactive robotics, formalizing the interaction between the robotic agent and human collaborators is central. Below is a representative mathematical formulation for this lecture topic:</p> \[\min_{\theta} \; \mathbb{E}_{\tau \sim \mathcal{D}} \left[ \mathcal{L}(\pi_\theta(a_t \mid s_t, h_t), \; a^*_t) \right] + \lambda \mathcal{R}(\theta)\] <p>Where $s_t$ represents the robot state, $h_t$ encapsulates the human context (e.g., intent, language instruction, or corrective signals), and $\pi_\theta$ denotes the interactive policy.</p> <h3 id="interactive-components--figures">Interactive Components &amp; Figures</h3> <p>Student teams are encouraged to illustrate architectures, control loops, or data distributions using clear figures and interactive widgets:</p> <div class="language-liquid highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+
+
+
+&lt;figure
+  
+&gt;
+  &lt;picture&gt;
+    &lt;!-- Auto scaling with imagemagick --&gt;
+    &lt;!--
+      See https://www.debugbear.com/blog/responsive-images#w-descriptors-and-the-sizes-attribute and
+      https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images for info on defining 'sizes' for responsive images
+    --&gt;
+    
+    &lt;img
+      src="/2026fa-learning-interactive-robots/assets/img/2026-11-23-safety-trust/overview.png"
+      
+        class="img-fluid rounded z-depth-1"
+      
+      
+        width="100%"
+      
+      
+        height="auto"
+      
+      
+      
+      
+      
+      
+      onerror="this.onerror=null; $('.responsive-img-srcset').remove();"
+    &gt;
+  &lt;/picture&gt;
+
+  
+    &lt;figcaption class="caption"&gt;Figure 1: Conceptual overview diagram of Safety, Trust.&lt;/figcaption&gt;
+  
+&lt;/figure&gt;
+
+</code></pre></div></div> <hr/> <h2 id="discussion--paper-syntheses">Discussion &amp; Paper Syntheses</h2> <p>During lecture, we reviewed key methodologies and empirical findings from the foundational literature:</p> <ul> <li><strong>Problem Framing</strong>: How does Safety, Trust overcome the limitations of traditional non-interactive robotics?</li> <li><strong>Core Insights</strong>: What architectural priors or algorithmic choices yield robust interactive performance?</li> <li><strong>Embodied Deployment</strong>: How do these models transfer to physical hardware under real-world latency, noise, and safety constraints?</li> </ul> <hr/> <h2 id="critical-analysis--future-directions">Critical Analysis &amp; Future Directions</h2> <ol> <li><strong>Assumptions &amp; Failure Modes</strong>: What implicit assumptions about human behavior or sensor observability are violated in unstructured environments?</li> <li><strong>Scalability &amp; Generalization</strong>: How well do the learned models adapt to novel humans, unseen tasks, or out-of-distribution physical interactions?</li> <li><strong>Open Research Questions</strong>: What questions remain unresolved for next-generation interactive robots?</li> </ol> <hr/> <h2 id="references">References</h2>]]></content><author><name>Scribe Team (Student Names)</name></author><summary type="html"><![CDATA[Control barrier functions, reachability analysis, human trust dynamics, and verifiable safe interaction in robotics.]]></summary></entry><entry><title type="html">Continual Learning, Multi-task Learning</title><link href="https://live-robotics-uva.github.io/2026fa-learning-interactive-robots/blog/2026/continual-learning-multi-task-learning/" rel="alternate" type="text/html" title="Continual Learning, Multi-task Learning"/><published>2026-11-18T00:00:00+00:00</published><updated>2026-11-18T00:00:00+00:00</updated><id>https://live-robotics-uva.github.io/2026fa-learning-interactive-robots/blog/2026/continual-learning-multi-task-learning</id><content type="html" xml:base="https://live-robotics-uva.github.io/2026fa-learning-interactive-robots/blog/2026/continual-learning-multi-task-learning/"><![CDATA[<h2 id="introduction--motivation">Introduction &amp; Motivation</h2> <p>This lecture report synthesizes the core concepts, assigned readings, and classroom discussions for the <strong>Continual Learning, Multi-task Learning</strong> session in <em>Learning for Interactive Robots (CS 6501, Fall 2026)</em> at the University of Virginia.</p> <blockquote> <p><strong>Key takeaway</strong>: Lifelong robot learning, preventing catastrophic forgetting, and positive transfer across diverse robotic manipulation tasks.</p> </blockquote> <hr/> <h2 id="key-concepts--theoretical-foundations">Key Concepts &amp; Theoretical Foundations</h2> <p>In interactive robotics, formalizing the interaction between the robotic agent and human collaborators is central. Below is a representative mathematical formulation for this lecture topic:</p> \[\min_{\theta} \; \mathbb{E}_{\tau \sim \mathcal{D}} \left[ \mathcal{L}(\pi_\theta(a_t \mid s_t, h_t), \; a^*_t) \right] + \lambda \mathcal{R}(\theta)\] <p>Where $s_t$ represents the robot state, $h_t$ encapsulates the human context (e.g., intent, language instruction, or corrective signals), and $\pi_\theta$ denotes the interactive policy.</p> <h3 id="interactive-components--figures">Interactive Components &amp; Figures</h3> <p>Student teams are encouraged to illustrate architectures, control loops, or data distributions using clear figures and interactive widgets:</p> <div class="language-liquid highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+
+
+
+&lt;figure
+  
+&gt;
+  &lt;picture&gt;
+    &lt;!-- Auto scaling with imagemagick --&gt;
+    &lt;!--
+      See https://www.debugbear.com/blog/responsive-images#w-descriptors-and-the-sizes-attribute and
+      https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images for info on defining 'sizes' for responsive images
+    --&gt;
+    
+    &lt;img
+      src="/2026fa-learning-interactive-robots/assets/img/2026-11-18-continual-learning-multi-task-learning/overview.png"
+      
+        class="img-fluid rounded z-depth-1"
+      
+      
+        width="100%"
+      
+      
+        height="auto"
+      
+      
+      
+      
+      
+      
+      onerror="this.onerror=null; $('.responsive-img-srcset').remove();"
+    &gt;
+  &lt;/picture&gt;
+
+  
+    &lt;figcaption class="caption"&gt;Figure 1: Conceptual overview diagram of Continual Learning, Multi-task Learning.&lt;/figcaption&gt;
+  
+&lt;/figure&gt;
+
+</code></pre></div></div> <hr/> <h2 id="discussion--paper-syntheses">Discussion &amp; Paper Syntheses</h2> <p>During lecture, we reviewed key methodologies and empirical findings from the foundational literature:</p> <ul> <li><strong>Problem Framing</strong>: How does Continual Learning, Multi-task Learning overcome the limitations of traditional non-interactive robotics?</li> <li><strong>Core Insights</strong>: What architectural priors or algorithmic choices yield robust interactive performance?</li> <li><strong>Embodied Deployment</strong>: How do these models transfer to physical hardware under real-world latency, noise, and safety constraints?</li> </ul> <hr/> <h2 id="critical-analysis--future-directions">Critical Analysis &amp; Future Directions</h2> <ol> <li><strong>Assumptions &amp; Failure Modes</strong>: What implicit assumptions about human behavior or sensor observability are violated in unstructured environments?</li> <li><strong>Scalability &amp; Generalization</strong>: How well do the learned models adapt to novel humans, unseen tasks, or out-of-distribution physical interactions?</li> <li><strong>Open Research Questions</strong>: What questions remain unresolved for next-generation interactive robots?</li> </ol> <hr/> <h2 id="references">References</h2>]]></content><author><name>Scribe Team (Student Names)</name></author><summary type="html"><![CDATA[Lifelong robot learning, preventing catastrophic forgetting, and positive transfer across diverse robotic manipulation tasks.]]></summary></entry><entry><title type="html">Human-in-the-loop Systems</title><link href="https://live-robotics-uva.github.io/2026fa-learning-interactive-robots/blog/2026/human-in-the-loop-systems/" rel="alternate" type="text/html" title="Human-in-the-loop Systems"/><published>2026-11-16T00:00:00+00:00</published><updated>2026-11-16T00:00:00+00:00</updated><id>https://live-robotics-uva.github.io/2026fa-learning-interactive-robots/blog/2026/human-in-the-loop-systems</id><content type="html" xml:base="https://live-robotics-uva.github.io/2026fa-learning-interactive-robots/blog/2026/human-in-the-loop-systems/"><![CDATA[<h2 id="introduction--motivation">Introduction &amp; Motivation</h2> <p>This lecture report synthesizes the core concepts, assigned readings, and classroom discussions for the <strong>Human-in-the-loop Systems</strong> session in <em>Learning for Interactive Robots (CS 6501, Fall 2026)</em> at the University of Virginia.</p> <blockquote> <p><strong>Key takeaway</strong>: Interactive reinforcement learning, human feedback loops, and human-in-the-loop cyber-physical robotic systems.</p> </blockquote> <hr/> <h2 id="key-concepts--theoretical-foundations">Key Concepts &amp; Theoretical Foundations</h2> <p>In interactive robotics, formalizing the interaction between the robotic agent and human collaborators is central. Below is a representative mathematical formulation for this lecture topic:</p> \[\min_{\theta} \; \mathbb{E}_{\tau \sim \mathcal{D}} \left[ \mathcal{L}(\pi_\theta(a_t \mid s_t, h_t), \; a^*_t) \right] + \lambda \mathcal{R}(\theta)\] <p>Where $s_t$ represents the robot state, $h_t$ encapsulates the human context (e.g., intent, language instruction, or corrective signals), and $\pi_\theta$ denotes the interactive policy.</p> <h3 id="interactive-components--figures">Interactive Components &amp; Figures</h3> <p>Student teams are encouraged to illustrate architectures, control loops, or data distributions using clear figures and interactive widgets:</p> <div class="language-liquid highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+
+
+
+&lt;figure
+  
+&gt;
+  &lt;picture&gt;
+    &lt;!-- Auto scaling with imagemagick --&gt;
+    &lt;!--
+      See https://www.debugbear.com/blog/responsive-images#w-descriptors-and-the-sizes-attribute and
+      https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images for info on defining 'sizes' for responsive images
+    --&gt;
+    
+    &lt;img
+      src="/2026fa-learning-interactive-robots/assets/img/2026-11-16-human-in-the-loop-systems/overview.png"
+      
+        class="img-fluid rounded z-depth-1"
+      
+      
+        width="100%"
+      
+      
+        height="auto"
+      
+      
+      
+      
+      
+      
+      onerror="this.onerror=null; $('.responsive-img-srcset').remove();"
+    &gt;
+  &lt;/picture&gt;
+
+  
+    &lt;figcaption class="caption"&gt;Figure 1: Conceptual overview diagram of Human-in-the-loop Systems.&lt;/figcaption&gt;
+  
+&lt;/figure&gt;
+
+</code></pre></div></div> <hr/> <h2 id="discussion--paper-syntheses">Discussion &amp; Paper Syntheses</h2> <p>During lecture, we reviewed key methodologies and empirical findings from the foundational literature:</p> <ul> <li><strong>Problem Framing</strong>: How does Human-in-the-loop Systems overcome the limitations of traditional non-interactive robotics?</li> <li><strong>Core Insights</strong>: What architectural priors or algorithmic choices yield robust interactive performance?</li> <li><strong>Embodied Deployment</strong>: How do these models transfer to physical hardware under real-world latency, noise, and safety constraints?</li> </ul> <hr/> <h2 id="critical-analysis--future-directions">Critical Analysis &amp; Future Directions</h2> <ol> <li><strong>Assumptions &amp; Failure Modes</strong>: What implicit assumptions about human behavior or sensor observability are violated in unstructured environments?</li> <li><strong>Scalability &amp; Generalization</strong>: How well do the learned models adapt to novel humans, unseen tasks, or out-of-distribution physical interactions?</li> <li><strong>Open Research Questions</strong>: What questions remain unresolved for next-generation interactive robots?</li> </ol> <hr/> <h2 id="references">References</h2>]]></content><author><name>Scribe Team (Student Names)</name></author><summary type="html"><![CDATA[Interactive reinforcement learning, human feedback loops, and human-in-the-loop cyber-physical robotic systems.]]></summary></entry><entry><title type="html">Shared Autonomy</title><link href="https://live-robotics-uva.github.io/2026fa-learning-interactive-robots/blog/2026/shared-autonomy/" rel="alternate" type="text/html" title="Shared Autonomy"/><published>2026-11-04T00:00:00+00:00</published><updated>2026-11-04T00:00:00+00:00</updated><id>https://live-robotics-uva.github.io/2026fa-learning-interactive-robots/blog/2026/shared-autonomy</id><content type="html" xml:base="https://live-robotics-uva.github.io/2026fa-learning-interactive-robots/blog/2026/shared-autonomy/"><![CDATA[<h2 id="introduction--motivation">Introduction &amp; Motivation</h2> <p>This lecture report synthesizes the core concepts, assigned readings, and classroom discussions for the <strong>Shared Autonomy</strong> session in <em>Learning for Interactive Robots (CS 6501, Fall 2026)</em> at the University of Virginia.</p> <blockquote> <p><strong>Key takeaway</strong>: Blending human teleoperation and robot autonomy for assistive devices, manipulators, and robotic vehicles.</p> </blockquote> <hr/> <h2 id="key-concepts--theoretical-foundations">Key Concepts &amp; Theoretical Foundations</h2> <p>In interactive robotics, formalizing the interaction between the robotic agent and human collaborators is central. Below is a representative mathematical formulation for this lecture topic:</p> \[\min_{\theta} \; \mathbb{E}_{\tau \sim \mathcal{D}} \left[ \mathcal{L}(\pi_\theta(a_t \mid s_t, h_t), \; a^*_t) \right] + \lambda \mathcal{R}(\theta)\] <p>Where $s_t$ represents the robot state, $h_t$ encapsulates the human context (e.g., intent, language instruction, or corrective signals), and $\pi_\theta$ denotes the interactive policy.</p> <h3 id="interactive-components--figures">Interactive Components &amp; Figures</h3> <p>Student teams are encouraged to illustrate architectures, control loops, or data distributions using clear figures and interactive widgets:</p> <div class="language-liquid highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+
+
+
+&lt;figure
+  
+&gt;
+  &lt;picture&gt;
+    &lt;!-- Auto scaling with imagemagick --&gt;
+    &lt;!--
+      See https://www.debugbear.com/blog/responsive-images#w-descriptors-and-the-sizes-attribute and
+      https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images for info on defining 'sizes' for responsive images
+    --&gt;
+    
+    &lt;img
+      src="/2026fa-learning-interactive-robots/assets/img/2026-11-04-shared-autonomy/overview.png"
+      
+        class="img-fluid rounded z-depth-1"
+      
+      
+        width="100%"
+      
+      
+        height="auto"
+      
+      
+      
+      
+      
+      
+      onerror="this.onerror=null; $('.responsive-img-srcset').remove();"
+    &gt;
+  &lt;/picture&gt;
+
+  
+    &lt;figcaption class="caption"&gt;Figure 1: Conceptual overview diagram of Shared Autonomy.&lt;/figcaption&gt;
+  
+&lt;/figure&gt;
+
+</code></pre></div></div> <hr/> <h2 id="discussion--paper-syntheses">Discussion &amp; Paper Syntheses</h2> <p>During lecture, we reviewed key methodologies and empirical findings from the foundational literature:</p> <ul> <li><strong>Problem Framing</strong>: How does Shared Autonomy overcome the limitations of traditional non-interactive robotics?</li> <li><strong>Core Insights</strong>: What architectural priors or algorithmic choices yield robust interactive performance?</li> <li><strong>Embodied Deployment</strong>: How do these models transfer to physical hardware under real-world latency, noise, and safety constraints?</li> </ul> <hr/> <h2 id="critical-analysis--future-directions">Critical Analysis &amp; Future Directions</h2> <ol> <li><strong>Assumptions &amp; Failure Modes</strong>: What implicit assumptions about human behavior or sensor observability are violated in unstructured environments?</li> <li><strong>Scalability &amp; Generalization</strong>: How well do the learned models adapt to novel humans, unseen tasks, or out-of-distribution physical interactions?</li> <li><strong>Open Research Questions</strong>: What questions remain unresolved for next-generation interactive robots?</li> </ol> <hr/> <h2 id="references">References</h2>]]></content><author><name>Scribe Team (Student Names)</name></author><summary type="html"><![CDATA[Blending human teleoperation and robot autonomy for assistive devices, manipulators, and robotic vehicles.]]></summary></entry><entry><title type="html">Social Interaction, Cooperation</title><link href="https://live-robotics-uva.github.io/2026fa-learning-interactive-robots/blog/2026/social-interaction-cooperation/" rel="alternate" type="text/html" title="Social Interaction, Cooperation"/><published>2026-11-02T00:00:00+00:00</published><updated>2026-11-02T00:00:00+00:00</updated><id>https://live-robotics-uva.github.io/2026fa-learning-interactive-robots/blog/2026/social-interaction-cooperation</id><content type="html" xml:base="https://live-robotics-uva.github.io/2026fa-learning-interactive-robots/blog/2026/social-interaction-cooperation/"><![CDATA[<h2 id="introduction--motivation">Introduction &amp; Motivation</h2> <p>This lecture report synthesizes the core concepts, assigned readings, and classroom discussions for the <strong>Social Interaction, Cooperation</strong> session in <em>Learning for Interactive Robots (CS 6501, Fall 2026)</em> at the University of Virginia.</p> <blockquote> <p><strong>Key takeaway</strong>: Multi-agent coordination, game-theoretic formulations of human-robot teaming, and social conventions in shared workspaces.</p> </blockquote> <hr/> <h2 id="key-concepts--theoretical-foundations">Key Concepts &amp; Theoretical Foundations</h2> <p>In interactive robotics, formalizing the interaction between the robotic agent and human collaborators is central. Below is a representative mathematical formulation for this lecture topic:</p> \[\min_{\theta} \; \mathbb{E}_{\tau \sim \mathcal{D}} \left[ \mathcal{L}(\pi_\theta(a_t \mid s_t, h_t), \; a^*_t) \right] + \lambda \mathcal{R}(\theta)\] <p>Where $s_t$ represents the robot state, $h_t$ encapsulates the human context (e.g., intent, language instruction, or corrective signals), and $\pi_\theta$ denotes the interactive policy.</p> <h3 id="interactive-components--figures">Interactive Components &amp; Figures</h3> <p>Student teams are encouraged to illustrate architectures, control loops, or data distributions using clear figures and interactive widgets:</p> <div class="language-liquid highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+
+
+
+&lt;figure
+  
+&gt;
+  &lt;picture&gt;
+    &lt;!-- Auto scaling with imagemagick --&gt;
+    &lt;!--
+      See https://www.debugbear.com/blog/responsive-images#w-descriptors-and-the-sizes-attribute and
+      https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images for info on defining 'sizes' for responsive images
+    --&gt;
+    
+    &lt;img
+      src="/2026fa-learning-interactive-robots/assets/img/2026-11-02-social-interaction-cooperation/overview.png"
+      
+        class="img-fluid rounded z-depth-1"
+      
+      
+        width="100%"
+      
+      
+        height="auto"
+      
+      
+      
+      
+      
+      
+      onerror="this.onerror=null; $('.responsive-img-srcset').remove();"
+    &gt;
+  &lt;/picture&gt;
+
+  
+    &lt;figcaption class="caption"&gt;Figure 1: Conceptual overview diagram of Social Interaction, Cooperation.&lt;/figcaption&gt;
+  
+&lt;/figure&gt;
+
+</code></pre></div></div> <hr/> <h2 id="discussion--paper-syntheses">Discussion &amp; Paper Syntheses</h2> <p>During lecture, we reviewed key methodologies and empirical findings from the foundational literature:</p> <ul> <li><strong>Problem Framing</strong>: How does Social Interaction, Cooperation overcome the limitations of traditional non-interactive robotics?</li> <li><strong>Core Insights</strong>: What architectural priors or algorithmic choices yield robust interactive performance?</li> <li><strong>Embodied Deployment</strong>: How do these models transfer to physical hardware under real-world latency, noise, and safety constraints?</li> </ul> <hr/> <h2 id="critical-analysis--future-directions">Critical Analysis &amp; Future Directions</h2> <ol> <li><strong>Assumptions &amp; Failure Modes</strong>: What implicit assumptions about human behavior or sensor observability are violated in unstructured environments?</li> <li><strong>Scalability &amp; Generalization</strong>: How well do the learned models adapt to novel humans, unseen tasks, or out-of-distribution physical interactions?</li> <li><strong>Open Research Questions</strong>: What questions remain unresolved for next-generation interactive robots?</li> </ol> <hr/> <h2 id="references">References</h2>]]></content><author><name>Scribe Team (Student Names)</name></author><summary type="html"><![CDATA[Multi-agent coordination, game-theoretic formulations of human-robot teaming, and social conventions in shared workspaces.]]></summary></entry><entry><title type="html">Preference, Influence</title><link href="https://live-robotics-uva.github.io/2026fa-learning-interactive-robots/blog/2026/preference-influence/" rel="alternate" type="text/html" title="Preference, Influence"/><published>2026-10-28T00:00:00+00:00</published><updated>2026-10-28T00:00:00+00:00</updated><id>https://live-robotics-uva.github.io/2026fa-learning-interactive-robots/blog/2026/preference-influence</id><content type="html" xml:base="https://live-robotics-uva.github.io/2026fa-learning-interactive-robots/blog/2026/preference-influence/"><![CDATA[<h2 id="introduction--motivation">Introduction &amp; Motivation</h2> <p>This lecture report synthesizes the core concepts, assigned readings, and classroom discussions for the <strong>Preference, Influence</strong> session in <em>Learning for Interactive Robots (CS 6501, Fall 2026)</em> at the University of Virginia.</p> <blockquote> <p><strong>Key takeaway</strong>: Learning human reward functions and preferences from pairwise comparisons, rankings, and active information gathering.</p> </blockquote> <hr/> <h2 id="key-concepts--theoretical-foundations">Key Concepts &amp; Theoretical Foundations</h2> <p>In interactive robotics, formalizing the interaction between the robotic agent and human collaborators is central. Below is a representative mathematical formulation for this lecture topic:</p> \[\min_{\theta} \; \mathbb{E}_{\tau \sim \mathcal{D}} \left[ \mathcal{L}(\pi_\theta(a_t \mid s_t, h_t), \; a^*_t) \right] + \lambda \mathcal{R}(\theta)\] <p>Where $s_t$ represents the robot state, $h_t$ encapsulates the human context (e.g., intent, language instruction, or corrective signals), and $\pi_\theta$ denotes the interactive policy.</p> <h3 id="interactive-components--figures">Interactive Components &amp; Figures</h3> <p>Student teams are encouraged to illustrate architectures, control loops, or data distributions using clear figures and interactive widgets:</p> <div class="language-liquid highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+
+
+
+&lt;figure
+  
+&gt;
+  &lt;picture&gt;
+    &lt;!-- Auto scaling with imagemagick --&gt;
+    &lt;!--
+      See https://www.debugbear.com/blog/responsive-images#w-descriptors-and-the-sizes-attribute and
+      https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images for info on defining 'sizes' for responsive images
+    --&gt;
+    
+    &lt;img
+      src="/2026fa-learning-interactive-robots/assets/img/2026-10-28-preference-influence/overview.png"
+      
+        class="img-fluid rounded z-depth-1"
+      
+      
+        width="100%"
+      
+      
+        height="auto"
+      
+      
+      
+      
+      
+      
+      onerror="this.onerror=null; $('.responsive-img-srcset').remove();"
+    &gt;
+  &lt;/picture&gt;
+
+  
+    &lt;figcaption class="caption"&gt;Figure 1: Conceptual overview diagram of Preference, Influence.&lt;/figcaption&gt;
+  
+&lt;/figure&gt;
+
+</code></pre></div></div> <hr/> <h2 id="discussion--paper-syntheses">Discussion &amp; Paper Syntheses</h2> <p>During lecture, we reviewed key methodologies and empirical findings from the foundational literature:</p> <ul> <li><strong>Problem Framing</strong>: How does Preference, Influence overcome the limitations of traditional non-interactive robotics?</li> <li><strong>Core Insights</strong>: What architectural priors or algorithmic choices yield robust interactive performance?</li> <li><strong>Embodied Deployment</strong>: How do these models transfer to physical hardware under real-world latency, noise, and safety constraints?</li> </ul> <hr/> <h2 id="critical-analysis--future-directions">Critical Analysis &amp; Future Directions</h2> <ol> <li><strong>Assumptions &amp; Failure Modes</strong>: What implicit assumptions about human behavior or sensor observability are violated in unstructured environments?</li> <li><strong>Scalability &amp; Generalization</strong>: How well do the learned models adapt to novel humans, unseen tasks, or out-of-distribution physical interactions?</li> <li><strong>Open Research Questions</strong>: What questions remain unresolved for next-generation interactive robots?</li> </ol> <hr/> <h2 id="references">References</h2>]]></content><author><name>Scribe Team (Student Names)</name></author><summary type="html"><![CDATA[Learning human reward functions and preferences from pairwise comparisons, rankings, and active information gathering.]]></summary></entry><entry><title type="html">Intent/Trajectory Prediction</title><link href="https://live-robotics-uva.github.io/2026fa-learning-interactive-robots/blog/2026/intent-trajectory-prediction/" rel="alternate" type="text/html" title="Intent/Trajectory Prediction"/><published>2026-10-26T00:00:00+00:00</published><updated>2026-10-26T00:00:00+00:00</updated><id>https://live-robotics-uva.github.io/2026fa-learning-interactive-robots/blog/2026/intent-trajectory-prediction</id><content type="html" xml:base="https://live-robotics-uva.github.io/2026fa-learning-interactive-robots/blog/2026/intent-trajectory-prediction/"><![CDATA[<h2 id="introduction--motivation">Introduction &amp; Motivation</h2> <p>This lecture report synthesizes the core concepts, assigned readings, and classroom discussions for the <strong>Intent/Trajectory Prediction</strong> session in <em>Learning for Interactive Robots (CS 6501, Fall 2026)</em> at the University of Virginia.</p> <blockquote> <p><strong>Key takeaway</strong>: Forecasting human motion and navigation trajectories in shared physical environments using generative and sequence models.</p> </blockquote> <hr/> <h2 id="key-concepts--theoretical-foundations">Key Concepts &amp; Theoretical Foundations</h2> <p>In interactive robotics, formalizing the interaction between the robotic agent and human collaborators is central. Below is a representative mathematical formulation for this lecture topic:</p> \[\min_{\theta} \; \mathbb{E}_{\tau \sim \mathcal{D}} \left[ \mathcal{L}(\pi_\theta(a_t \mid s_t, h_t), \; a^*_t) \right] + \lambda \mathcal{R}(\theta)\] <p>Where $s_t$ represents the robot state, $h_t$ encapsulates the human context (e.g., intent, language instruction, or corrective signals), and $\pi_\theta$ denotes the interactive policy.</p> <h3 id="interactive-components--figures">Interactive Components &amp; Figures</h3> <p>Student teams are encouraged to illustrate architectures, control loops, or data distributions using clear figures and interactive widgets:</p> <div class="language-liquid highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+
+
+
+&lt;figure
+  
+&gt;
+  &lt;picture&gt;
+    &lt;!-- Auto scaling with imagemagick --&gt;
+    &lt;!--
+      See https://www.debugbear.com/blog/responsive-images#w-descriptors-and-the-sizes-attribute and
+      https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images for info on defining 'sizes' for responsive images
+    --&gt;
+    
+    &lt;img
+      src="/2026fa-learning-interactive-robots/assets/img/2026-10-26-intent-trajectory-prediction/overview.png"
+      
+        class="img-fluid rounded z-depth-1"
+      
+      
+        width="100%"
+      
+      
+        height="auto"
+      
+      
+      
+      
+      
+      
+      onerror="this.onerror=null; $('.responsive-img-srcset').remove();"
+    &gt;
+  &lt;/picture&gt;
+
+  
+    &lt;figcaption class="caption"&gt;Figure 1: Conceptual overview diagram of Intent/Trajectory Prediction.&lt;/figcaption&gt;
+  
+&lt;/figure&gt;
+
+</code></pre></div></div> <hr/> <h2 id="discussion--paper-syntheses">Discussion &amp; Paper Syntheses</h2> <p>During lecture, we reviewed key methodologies and empirical findings from the foundational literature:</p> <ul> <li><strong>Problem Framing</strong>: How does Intent/Trajectory Prediction overcome the limitations of traditional non-interactive robotics?</li> <li><strong>Core Insights</strong>: What architectural priors or algorithmic choices yield robust interactive performance?</li> <li><strong>Embodied Deployment</strong>: How do these models transfer to physical hardware under real-world latency, noise, and safety constraints?</li> </ul> <hr/> <h2 id="critical-analysis--future-directions">Critical Analysis &amp; Future Directions</h2> <ol> <li><strong>Assumptions &amp; Failure Modes</strong>: What implicit assumptions about human behavior or sensor observability are violated in unstructured environments?</li> <li><strong>Scalability &amp; Generalization</strong>: How well do the learned models adapt to novel humans, unseen tasks, or out-of-distribution physical interactions?</li> <li><strong>Open Research Questions</strong>: What questions remain unresolved for next-generation interactive robots?</li> </ol> <hr/> <h2 id="references">References</h2>]]></content><author><name>Scribe Team (Student Names)</name></author><summary type="html"><![CDATA[Forecasting human motion and navigation trajectories in shared physical environments using generative and sequence models.]]></summary></entry><entry><title type="html">Human Models</title><link href="https://live-robotics-uva.github.io/2026fa-learning-interactive-robots/blog/2026/human-models/" rel="alternate" type="text/html" title="Human Models"/><published>2026-10-21T00:00:00+00:00</published><updated>2026-10-21T00:00:00+00:00</updated><id>https://live-robotics-uva.github.io/2026fa-learning-interactive-robots/blog/2026/human-models</id><content type="html" xml:base="https://live-robotics-uva.github.io/2026fa-learning-interactive-robots/blog/2026/human-models/"><![CDATA[<h2 id="introduction--motivation">Introduction &amp; Motivation</h2> <p>This lecture report synthesizes the core concepts, assigned readings, and classroom discussions for the <strong>Human Models</strong> session in <em>Learning for Interactive Robots (CS 6501, Fall 2026)</em> at the University of Virginia.</p> <blockquote> <p><strong>Key takeaway</strong>: Computational human models: Boltzmann rationality, bounded rationality, Theory of Mind, and belief modeling for human-robot interaction.</p> </blockquote> <hr/> <h2 id="key-concepts--theoretical-foundations">Key Concepts &amp; Theoretical Foundations</h2> <p>In interactive robotics, formalizing the interaction between the robotic agent and human collaborators is central. Below is a representative mathematical formulation for this lecture topic:</p> \[\min_{\theta} \; \mathbb{E}_{\tau \sim \mathcal{D}} \left[ \mathcal{L}(\pi_\theta(a_t \mid s_t, h_t), \; a^*_t) \right] + \lambda \mathcal{R}(\theta)\] <p>Where $s_t$ represents the robot state, $h_t$ encapsulates the human context (e.g., intent, language instruction, or corrective signals), and $\pi_\theta$ denotes the interactive policy.</p> <h3 id="interactive-components--figures">Interactive Components &amp; Figures</h3> <p>Student teams are encouraged to illustrate architectures, control loops, or data distributions using clear figures and interactive widgets:</p> <div class="language-liquid highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+
+
+
+&lt;figure
+  
+&gt;
+  &lt;picture&gt;
+    &lt;!-- Auto scaling with imagemagick --&gt;
+    &lt;!--
+      See https://www.debugbear.com/blog/responsive-images#w-descriptors-and-the-sizes-attribute and
+      https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images for info on defining 'sizes' for responsive images
+    --&gt;
+    
+    &lt;img
+      src="/2026fa-learning-interactive-robots/assets/img/2026-10-21-human-models/overview.png"
+      
+        class="img-fluid rounded z-depth-1"
+      
+      
+        width="100%"
+      
+      
+        height="auto"
+      
+      
+      
+      
+      
+      
+      onerror="this.onerror=null; $('.responsive-img-srcset').remove();"
+    &gt;
+  &lt;/picture&gt;
+
+  
+    &lt;figcaption class="caption"&gt;Figure 1: Conceptual overview diagram of Human Models.&lt;/figcaption&gt;
+  
+&lt;/figure&gt;
+
+</code></pre></div></div> <hr/> <h2 id="discussion--paper-syntheses">Discussion &amp; Paper Syntheses</h2> <p>During lecture, we reviewed key methodologies and empirical findings from the foundational literature:</p> <ul> <li><strong>Problem Framing</strong>: How does Human Models overcome the limitations of traditional non-interactive robotics?</li> <li><strong>Core Insights</strong>: What architectural priors or algorithmic choices yield robust interactive performance?</li> <li><strong>Embodied Deployment</strong>: How do these models transfer to physical hardware under real-world latency, noise, and safety constraints?</li> </ul> <hr/> <h2 id="critical-analysis--future-directions">Critical Analysis &amp; Future Directions</h2> <ol> <li><strong>Assumptions &amp; Failure Modes</strong>: What implicit assumptions about human behavior or sensor observability are violated in unstructured environments?</li> <li><strong>Scalability &amp; Generalization</strong>: How well do the learned models adapt to novel humans, unseen tasks, or out-of-distribution physical interactions?</li> <li><strong>Open Research Questions</strong>: What questions remain unresolved for next-generation interactive robots?</li> </ol> <hr/> <h2 id="references">References</h2>]]></content><author><name>Scribe Team (Student Names)</name></author><summary type="html"><![CDATA[Computational human models: Boltzmann rationality, bounded rationality, Theory of Mind, and belief modeling for human-robot interaction.]]></summary></entry><entry><title type="html">Non-verbal Interaction and Learning Signals</title><link href="https://live-robotics-uva.github.io/2026fa-learning-interactive-robots/blog/2026/non-verbal-interaction-and-learning-signals/" rel="alternate" type="text/html" title="Non-verbal Interaction and Learning Signals"/><published>2026-10-19T00:00:00+00:00</published><updated>2026-10-19T00:00:00+00:00</updated><id>https://live-robotics-uva.github.io/2026fa-learning-interactive-robots/blog/2026/non-verbal-interaction-and-learning-signals</id><content type="html" xml:base="https://live-robotics-uva.github.io/2026fa-learning-interactive-robots/blog/2026/non-verbal-interaction-and-learning-signals/"><![CDATA[<h2 id="introduction--motivation">Introduction &amp; Motivation</h2> <p>This lecture report synthesizes the core concepts, assigned readings, and classroom discussions for the <strong>Non-verbal Interaction and Learning Signals</strong> session in <em>Learning for Interactive Robots (CS 6501, Fall 2026)</em> at the University of Virginia.</p> <blockquote> <p><strong>Key takeaway</strong>: Implicit communication and learning signals: human gaze, head pose, facial expressions, and kinesic behaviors in interactive robotics.</p> </blockquote> <hr/> <h2 id="key-concepts--theoretical-foundations">Key Concepts &amp; Theoretical Foundations</h2> <p>In interactive robotics, formalizing the interaction between the robotic agent and human collaborators is central. Below is a representative mathematical formulation for this lecture topic:</p> \[\min_{\theta} \; \mathbb{E}_{\tau \sim \mathcal{D}} \left[ \mathcal{L}(\pi_\theta(a_t \mid s_t, h_t), \; a^*_t) \right] + \lambda \mathcal{R}(\theta)\] <p>Where $s_t$ represents the robot state, $h_t$ encapsulates the human context (e.g., intent, language instruction, or corrective signals), and $\pi_\theta$ denotes the interactive policy.</p> <h3 id="interactive-components--figures">Interactive Components &amp; Figures</h3> <p>Student teams are encouraged to illustrate architectures, control loops, or data distributions using clear figures and interactive widgets:</p> <div class="language-liquid highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+
+
+
+&lt;figure
+  
+&gt;
+  &lt;picture&gt;
+    &lt;!-- Auto scaling with imagemagick --&gt;
+    &lt;!--
+      See https://www.debugbear.com/blog/responsive-images#w-descriptors-and-the-sizes-attribute and
+      https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images for info on defining 'sizes' for responsive images
+    --&gt;
+    
+    &lt;img
+      src="/2026fa-learning-interactive-robots/assets/img/2026-10-19-non-verbal-interaction-and-learning-signals/overview.png"
+      
+        class="img-fluid rounded z-depth-1"
+      
+      
+        width="100%"
+      
+      
+        height="auto"
+      
+      
+      
+      
+      
+      
+      onerror="this.onerror=null; $('.responsive-img-srcset').remove();"
+    &gt;
+  &lt;/picture&gt;
+
+  
+    &lt;figcaption class="caption"&gt;Figure 1: Conceptual overview diagram of Non-verbal Interaction and Learning Signals.&lt;/figcaption&gt;
+  
+&lt;/figure&gt;
+
+</code></pre></div></div> <hr/> <h2 id="discussion--paper-syntheses">Discussion &amp; Paper Syntheses</h2> <p>During lecture, we reviewed key methodologies and empirical findings from the foundational literature:</p> <ul> <li><strong>Problem Framing</strong>: How does Non-verbal Interaction and Learning Signals overcome the limitations of traditional non-interactive robotics?</li> <li><strong>Core Insights</strong>: What architectural priors or algorithmic choices yield robust interactive performance?</li> <li><strong>Embodied Deployment</strong>: How do these models transfer to physical hardware under real-world latency, noise, and safety constraints?</li> </ul> <hr/> <h2 id="critical-analysis--future-directions">Critical Analysis &amp; Future Directions</h2> <ol> <li><strong>Assumptions &amp; Failure Modes</strong>: What implicit assumptions about human behavior or sensor observability are violated in unstructured environments?</li> <li><strong>Scalability &amp; Generalization</strong>: How well do the learned models adapt to novel humans, unseen tasks, or out-of-distribution physical interactions?</li> <li><strong>Open Research Questions</strong>: What questions remain unresolved for next-generation interactive robots?</li> </ol> <hr/> <h2 id="references">References</h2>]]></content><author><name>Scribe Team (Student Names)</name></author><summary type="html"><![CDATA[Implicit communication and learning signals: human gaze, head pose, facial expressions, and kinesic behaviors in interactive robotics.]]></summary></entry><entry><title type="html">Feedback and Correction</title><link href="https://live-robotics-uva.github.io/2026fa-learning-interactive-robots/blog/2026/feedback-and-correction/" rel="alternate" type="text/html" title="Feedback and Correction"/><published>2026-10-14T00:00:00+00:00</published><updated>2026-10-14T00:00:00+00:00</updated><id>https://live-robotics-uva.github.io/2026fa-learning-interactive-robots/blog/2026/feedback-and-correction</id><content type="html" xml:base="https://live-robotics-uva.github.io/2026fa-learning-interactive-robots/blog/2026/feedback-and-correction/"><![CDATA[<h2 id="introduction--motivation">Introduction &amp; Motivation</h2> <p>This lecture report synthesizes the core concepts, assigned readings, and classroom discussions for the <strong>Feedback and Correction</strong> session in <em>Learning for Interactive Robots (CS 6501, Fall 2026)</em> at the University of Virginia.</p> <blockquote> <p><strong>Key takeaway</strong>: Interactive policy learning through human interventions, corrective teleoperation, and natural language corrections.</p> </blockquote> <hr/> <h2 id="key-concepts--theoretical-foundations">Key Concepts &amp; Theoretical Foundations</h2> <p>In interactive robotics, formalizing the interaction between the robotic agent and human collaborators is central. Below is a representative mathematical formulation for this lecture topic:</p> \[\min_{\theta} \; \mathbb{E}_{\tau \sim \mathcal{D}} \left[ \mathcal{L}(\pi_\theta(a_t \mid s_t, h_t), \; a^*_t) \right] + \lambda \mathcal{R}(\theta)\] <p>Where $s_t$ represents the robot state, $h_t$ encapsulates the human context (e.g., intent, language instruction, or corrective signals), and $\pi_\theta$ denotes the interactive policy.</p> <h3 id="interactive-components--figures">Interactive Components &amp; Figures</h3> <p>Student teams are encouraged to illustrate architectures, control loops, or data distributions using clear figures and interactive widgets:</p> <div class="language-liquid highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+
+
+
+&lt;figure
+  
+&gt;
+  &lt;picture&gt;
+    &lt;!-- Auto scaling with imagemagick --&gt;
+    &lt;!--
+      See https://www.debugbear.com/blog/responsive-images#w-descriptors-and-the-sizes-attribute and
+      https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images for info on defining 'sizes' for responsive images
+    --&gt;
+    
+    &lt;img
+      src="/2026fa-learning-interactive-robots/assets/img/2026-10-14-feedback-and-correction/overview.png"
+      
+        class="img-fluid rounded z-depth-1"
+      
+      
+        width="100%"
+      
+      
+        height="auto"
+      
+      
+      
+      
+      
+      
+      onerror="this.onerror=null; $('.responsive-img-srcset').remove();"
+    &gt;
+  &lt;/picture&gt;
+
+  
+    &lt;figcaption class="caption"&gt;Figure 1: Conceptual overview diagram of Feedback and Correction.&lt;/figcaption&gt;
+  
+&lt;/figure&gt;
+
+</code></pre></div></div> <hr/> <h2 id="discussion--paper-syntheses">Discussion &amp; Paper Syntheses</h2> <p>During lecture, we reviewed key methodologies and empirical findings from the foundational literature:</p> <ul> <li><strong>Problem Framing</strong>: How does Feedback and Correction overcome the limitations of traditional non-interactive robotics?</li> <li><strong>Core Insights</strong>: What architectural priors or algorithmic choices yield robust interactive performance?</li> <li><strong>Embodied Deployment</strong>: How do these models transfer to physical hardware under real-world latency, noise, and safety constraints?</li> </ul> <hr/> <h2 id="critical-analysis--future-directions">Critical Analysis &amp; Future Directions</h2> <ol> <li><strong>Assumptions &amp; Failure Modes</strong>: What implicit assumptions about human behavior or sensor observability are violated in unstructured environments?</li> <li><strong>Scalability &amp; Generalization</strong>: How well do the learned models adapt to novel humans, unseen tasks, or out-of-distribution physical interactions?</li> <li><strong>Open Research Questions</strong>: What questions remain unresolved for next-generation interactive robots?</li> </ol> <hr/> <h2 id="references">References</h2>]]></content><author><name>Scribe Team (Student Names)</name></author><summary type="html"><![CDATA[Interactive policy learning through human interventions, corrective teleoperation, and natural language corrections.]]></summary></entry></feed>
