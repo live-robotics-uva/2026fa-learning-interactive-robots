@@ -4,3 +4,36 @@
   journal={CoRL},
   year={2022}
 }
+
+@inproceedings{ouyang_training_2022,
+	title = {Training language models to follow instructions with human feedback},
+	volume = {35},
+	url = {https://proceedings.neurips.cc/paper_files/paper/2022/hash/b1efde53be364a73914f58805a001731-Abstract-Conference.html},
+	doi = {10.52202/068431-2011},
+	abstract = {Making language models bigger does not inherently make them better at following a user's intent. For example, large language models can generate outputs that are untruthful, toxic, or simply not helpful to the user. In other words, these models are not aligned with their users. In this paper, we show an avenue for aligning language models with user intent on a wide range of tasks by fine-tuning with human feedback. Starting with a set of labeler-written prompts and prompts submitted through a language model {API}, we collect a dataset of labeler demonstrations of the desired model behavior, which we use to fine-tune {GPT}-3 using supervised learning. We then collect a dataset of rankings of model outputs, which we use to further fine-tune this supervised model using reinforcement learning from human feedback. We call the resulting models {InstructGPT}. In human evaluations on our prompt distribution, outputs from the 1.3B parameter {InstructGPT} model are preferred to outputs from the 175B {GPT}-3, despite having 100x fewer parameters. Moreover, {InstructGPT} models show improvements in truthfulness and reductions in toxic output generation while having minimal performance regressions on public {NLP} datasets. Even though {InstructGPT} still makes simple mistakes, our results show that fine-tuning with human feedback is a promising direction for aligning language models with human intent.},
+	pages = {27730--27744},
+	booktitle = {Advances in Neural Information Processing Systems},
+	publisher = {Curran Associates, Inc.},
+	author = {Ouyang, Long and Wu, Jeffrey and Jiang, Xu and Almeida, Diogo and Wainwright, Carroll and Mishkin, Pamela and Zhang, Chong and Agarwal, Sandhini and Slama, Katarina and Ray, Alex and Schulman, John and Hilton, Jacob and Kelton, Fraser and Miller, Luke and Simens, Maddie and Askell, Amanda and Welinder, Peter and Christiano, Paul F and Leike, Jan and Lowe, Ryan},
+	urldate = {2026-09-16},
+	date = {2022},
+	keywords = {{NLP}},
+	file = {Full Text PDF:C\:\\Users\\qeq4kh\\Zotero\\storage\\6XQLMVVD\\Ouyang et al. - 2022 - Training language models to follow instructions with human feedback.pdf:application/pdf},
+}
+
+@misc{wang_voyager_2023,
+	title = {Voyager: An Open-Ended Embodied Agent with Large Language Models},
+	url = {http://arxiv.org/abs/2305.16291},
+	doi = {10.48550/arXiv.2305.16291},
+	shorttitle = {Voyager},
+	abstract = {We introduce Voyager, the first {LLM}-powered embodied lifelong learning agent in Minecraft that continuously explores the world, acquires diverse skills, and makes novel discoveries without human intervention. Voyager consists of three key components: 1) an automatic curriculum that maximizes exploration, 2) an ever-growing skill library of executable code for storing and retrieving complex behaviors, and 3) a new iterative prompting mechanism that incorporates environment feedback, execution errors, and self-verification for program improvement. Voyager interacts with {GPT}-4 via blackbox queries, which bypasses the need for model parameter fine-tuning. The skills developed by Voyager are temporally extended, interpretable, and compositional, which compounds the agent's abilities rapidly and alleviates catastrophic forgetting. Empirically, Voyager shows strong in-context lifelong learning capability and exhibits exceptional proficiency in playing Minecraft. It obtains 3.3x more unique items, travels 2.3x longer distances, and unlocks key tech tree milestones up to 15.3x faster than prior {SOTA}. Voyager is able to utilize the learned skill library in a new Minecraft world to solve novel tasks from scratch, while other techniques struggle to generalize. We open-source our full codebase and prompts at https://voyager.minedojo.org/.},
+	number = {{arXiv}:2305.16291},
+	publisher = {{arXiv}},
+	author = {Wang, Guanzhi and Xie, Yuqi and Jiang, Yunfan and Mandlekar, Ajay and Xiao, Chaowei and Zhu, Yuke and Fan, Linxi and Anandkumar, Anima},
+	urldate = {2026-09-16},
+	date = {2023-10-19},
+	eprinttype = {arxiv},
+	eprint = {2305.16291 [cs.AI]},
+	keywords = {Computer Science - Machine Learning, Computer Science - Artificial Intelligence, {NLP}},
+	file = {Preprint PDF:C\:\\Users\\qeq4kh\\Zotero\\storage\\DQYWW9U4\\Wang et al. - 2023 - Voyager An Open-Ended Embodied Agent with Large Language Models.pdf:application/pdf;Snapshot:C\:\\Users\\qeq4kh\\Zotero\\storage\\A9MJKGAV\\2305.html:text/html},
+}
