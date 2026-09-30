@@ -5,7 +5,7 @@ description: "Vision-Language-Action (VLA) models (RT-1, RT-2, OpenVLA) trained 
 date: 2026-09-23
 future: true
 htmlwidgets: true
-ready: false
+ready: true
 
 # Reporter team authors
 authors:

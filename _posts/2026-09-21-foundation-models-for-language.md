@@ -5,7 +5,7 @@ description: "Leveraging Large Language Models (LLMs) for high-level robot task 
 date: 2026-09-21
 future: true
 htmlwidgets: true
-ready: false
+ready: true
 
 # Reporter team authors
 authors:
