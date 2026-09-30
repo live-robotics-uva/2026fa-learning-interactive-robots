@@ -207,7 +207,6 @@ However, the authors do not compare InstructGPT to a model trained with reinforc
 <br><br>
 
 ### Comparisons With Other Methods  
-sinfo -o "%.15P %.10a %.10l %.10D %.6c %.8m %.10T %N %E"
 
 **Q: What do the methods Voyager is compared against use for an LLM?** 
 
