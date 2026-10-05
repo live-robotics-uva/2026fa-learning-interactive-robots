@@ -21,6 +21,9 @@ toc:
   - name: "Language Grounding"
   - name: "Commonsense Reasoning"
   - name: "Applications and Limitations"
+    subsections:
+      - name: "Applications"
+      - name: "Limitations"
   - name: "Questions and Answers"
     subsections:
       - name: "Language Grounding Questions"
@@ -53,9 +56,30 @@ This lecture report covers the **Language Grounding & Commonsense** session in *
 
 ## Applications and Limitations {#applications-and-limitations}
 
-This lecture report covers the **Language Grounding & Commonsense** session in *Learning for Interactive Robots (CS 6501, Fall 2026)* at the University of Virginia.
+Given the capabilities of language grounding and commonsense reasoning, what are the current applications and limitations of these methods?
 
-> **Topic Overview**: Grounding natural language commands into physical environments, spatial relationships, and affordance-aware commonsense reasoning.
+### Applications {#applications}
+
+Language grounding and commonsense reasoning serve a similar purpose when applied to robotic systems. Both aim to increase the reasoning capabilities of the system and increase the complexity of tasks and environment. Language grounding increases the physical knowledge provided to an LLM by incorporating observations, state, feasibility, etc. into the prompt so that the LLM will reason within the constraints. Commonsense reasoning allows for basic knowledge to be contained straight in the method without explicitly configuring all different combinations of tasks, scenarios, environments, etc. and the relationships between them. These methods can be applied to various system solutions but are most commonly applied to generalist systems because they require robust reasoning that can handle higher variances and uncertainties for its inputs.
+
+A very common and popular problem application is household robotics, where a robot is assisting or completing a task for a human user. Given the variety of house layouts and potential tasks it is reasonably to use language grounding to ensure proposed subtasks are relevant and achievable<d-cite key="liu_grounding_2023"></d-cite> and commonsense reasoning to clear up ambiguity of task descriptions<d-cite key="kwon_toward_2024"></d-cite>.
+
+{% include figure.liquid
+   path="assets/img/2026-09-30-language-grounding-commonsense/grounded_commonsense.png"
+   class="img-fluid rounded z-depth-1"
+   caption="Figure 1: A household task of cleaning up a desk iterates between a VLM and LLM to infer the true task by reducing task ambiguity with self prompting and active perception. This allows an LLM to determine what subtasks should be completed to achieve the direct task (Kwon et al., 2024)."
+%}
+
+Without language grounding or commonsense reasoning, every task would have to be meticulously configured to make the robotic system robust to different layouts and terminologies. It would not be feasible to set up a generalist policy using hand configured tasks with the level of detail afforded by leveraging grounding and commonsense reasoning.
+
+### Limitations {#limitations}
+
+The benefits and advanced capabilities given by incorporating language grounding and commonsense reasoning into robotic systems do not come without risks and costs. Each system is unique and therefore subject to its own specific set of limitations but broadly there are three main limitations to keep in mind when leveraging these methods. *These limitations are not guaranteed to occur but can be prevalent and should be considered when determining total effectiveness.*
+
+1. *Lack of explainability:* All methods that make use of machine learning, specifically deep learning, are just black box functions with no explainability about the results. Explainability is important for identifying why a predictions was made so that feedback can be used to correct the inputs and influence the next predictions to better align with the desired output. This is particularly important for tasks that require long horizon or high precision reasoning where small mistakes lead to costly errors. Since the errors are not explainable, then the results are less controllable and the system must trust all of the responses from the models. This open loop methodology drastically limits the task complexity a system can complete in a robust and trustful manner.
+2. *Possibility of hallucinations:* When using an LLM, either with language grounding or for commonsense, to provide vital reasoning capabilities, any hallucinations render the prediction fundamentally incorrect. Since the LLM's are typically incorporated into robotic systems to handle environmental uncertainty, it is difficult to define rules to help verify the efficacy of an LLM response. With language grounding, the best case scenario for a hallucinated prediction is simply predicting the incorrect position of a target object leading to increased search time. Unfortunately, if the hallucination is bad enough the task could completely fail due to deadlocks<d-cite key="ahn_saycan_2022"></d-cite> or collision.
+3. *Higher latency:* Language grounding and commonsense reasoning typically rely on combining results from different models and methods to share bolster the strengths while reducing the weaknesses. This means that there is typically more compute required to run the proposed architecture since there are more components and leads to an increased risk of high latency. There are architectural ways to reduce the added latency if the system is carefully considered and designed. LLM-MCTS<d-cite key="zhao_llmmcts_2023"></d-cite> was able to reduce the latency compared to a vanilla MCTS due to the heuristics applied from the LLM during the search. Even though LLM-MCTS was able to reduce latency compared to the baseline, it still has a latency that is too high for real world deployment. Therefore, the accuracy boosts should be considered carefully after weighing the latency costs.
+
 ---
 
 ## Questions and Answers {#questions-and-answers}
