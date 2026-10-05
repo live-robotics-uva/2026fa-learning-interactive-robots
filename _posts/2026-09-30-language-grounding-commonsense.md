@@ -25,11 +25,11 @@ toc:
 ---
 
 ## Introduction {#introduction}
+Large language models (LLMs) are exposed to multiple different semantic context through its vast pretraining dataset, enabling these models to gain an extensive knowledge base of the real world. However, these models cannot be directly used in autonomous agents to complete real-world tasks as they lack the ability to understand and interact with the physical environment; real-world understanding does not automatically translate into actionable items for the agent. Thus, a key question is how can an autonomous agent use an LLM's knowledge to carry out multi-step instructions in a world that it must interact with?
 
-This lecture report covers the **Language Grounding & Commonsense** session in *Learning for Interactive Robots (CS 6501, Fall 2026)* at the University of Virginia.
-
-> **Topic Overview**: Grounding natural language commands into physical environments, spatial relationships, and affordance-aware commonsense reasoning.
-
+To answer this question, this lecture explores two different approaches to integrate LLMs into autonomous agents:
+- **Do As I Can, Not As I Say: Grounding Language in Robotic Affordances:** One approach is to have the LLM select the agent's next action. However, as mentioned earlier, the LLM does not consider the physical constraints of the agent nor does it provide concrete actions to achieve the task goal. Thus, SayCan applies a value function to constrain the LLM's natural language commands to skills available to the robot. This enables the robot to select the skill that is not only useful towards the goal and but also attainable. 
+- **Large Language Models as Commonsense Knowledge for Large-Scale Task Planning:** Another approach is to exploit the LLM's world knowledge to narrow the search space of possible actions. In the real world, there are various objects the agent can interact with and multiple places for it to search through, resulting in an exponential number of possible actions. Thus, the agent can use the LLM's knowledge to reason about the physical world, which guides the planner to select the best action based on commonsense. LLM-MCTS incorporates an LLM to provide a commonsense initial belief to start with, as well as suggesting a potential action plan to for the robot to take.
 ---
 
 ## Language Grounding {#language-grounding}
