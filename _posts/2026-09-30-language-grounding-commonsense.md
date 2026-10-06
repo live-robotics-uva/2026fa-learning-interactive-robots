@@ -48,9 +48,115 @@ This lecture report covers the **Language Grounding & Commonsense** session in *
 
 ## Commonsense Reasoning {#commonsense-reasoning}
 
-This lecture report covers the **Language Grounding & Commonsense** session in *Learning for Interactive Robots (CS 6501, Fall 2026)* at the University of Virginia.
+Given the wealth of commonsense knowledge encoded by Large language models, this next work explores the usefulness of LLMs as a policy versus a world model, proposing LLM-MCTS – an architecture that leverages this knowledge in both the model building and as a search heuristic in action selection. 
 
-> **Topic Overview**: Grounding natural language commands into physical environments, spatial relationships, and affordance-aware commonsense reasoning.
+### LLM as a Policy vs. World Model
+
+**Motivating Example**: An autonomous robot butler in a household environment. Consider asking the robot to put fruits in the fridge. Our commonsense reasoning allows us to narrow the vast search space of movable items and locations to likely considerations – the kitchen counter or cupboard as opposed to the bedroom closet. 
+
+This work defines two means of utilizing an LLM in task planning:
+- **L-Policy**: Given the history of past actions and observations, treat the LLM as a policy and query it directly for the next actions.
+- **L-Model**: Use LLM’s commonsense knowledge to build a world model and apply a planning algorithm to the model.
+
+L-Policy shows limitations regarding generalization, while L-Model performance depends on world model accuracy and planning algorithm efficiency. This paper combines the ideas of both to outperform either alone. 
+
+### Problem Setup
+
+**Task Environment**: VirtualHome, a household activity simulation platform, evaluated across 800 randomly generated large-scale, partially observable object rearrangement tasks.
+
+**Formulation**:The problem is modeled as a Partially Observable Markov Decision Process (POMDP):
+
+$$
+\left(S, A, \Omega, T, O, R, \gamma \right)
+$$
+
+- State Space ($$S$$): positions of the robot, movable items, containers
+- Action Space ($$A$$): pick, place, open, close, move
+- Observation Space ($$\Omega$$): robot only able to see object/container positions within its room or an opened container at its location
+- Transition Function ($$T$$): assumed as given and deterministic
+- Observation Function ($$O$$): provides partial information about a state
+- Reward Function: ($$R$$): reward for achieving the desire item arrangement
+- Discount Factor ($$\gamma$$): discount factor on future rewards
+
+The robot acts on the history of past observations and actions $$h_t = \left(o_0, a_0, o_1, a_1, \ldots, o_{t-1}, a_{t-1}  \right)$$, with the goal of maximizing an expected cumulative reward: 
+
+$$
+\pi^*\left(h_t\right) = \arg\max_{a \in A} \mathbb{E} [\sum_{i=0}^\infty \gamma^i R \left( s_{t+i}, a_{t+i} | a_t = a\right)].
+$$
+
+**Challenges**: long horizon planning, vast action space &rarr; exponentially large search tree
+
+### LLM as a Commonsense World Model
+
+The approach uses an LLM's commonsense knowledge to generate initial beliefs over object locations thus prioritizing search to more appropriate locations. Prompting details are as follows: Given expert actions and observations in similar environments, the LLMs are prompted to sample object positions $$M$$ times. Each time, according to a fixed prompt, it is asked to predict the position of an object. The response is then encoded and mapped to objects in the dataset. The sampled answers are counted and normalized to form a probability distribution over each object's location. 
+
+Beliefs are maintained in object-centric graphs where the abstract-level relationships are the edges connecting objects (nodes). 
+
+### LLM as a Heuristic Policy
+
+The approach also uses the LLM as a policy; however, its role is specifically to guide action selection in the PUCT process. The LLM is sampled $$M$$ times for actions to take ($$\alpha_i$$), given the prompt and trajectory history ($$h$$), and the empirical policy distribution is thus formulated as such:
+
+$$
+\hat{\pi}\left(a | h \right) = \lambda \frac{1}{|A|} + (1 - \lambda)\text{Softmax}\{\sum_{i=1}^M \text{CosineSim}\left(\alpha_i, a \right) - \eta\},
+$$
+
+where $$\eta$$ is the average cosine similarity value and $$\lambda$$ is a hyperparameter adding randomness such that the search is not entirely reliant on the LLM suggestion. 
+
+### Integration with Monte-Carlo Tree Search (MCTS)
+
+{% include figure.liquid path="assets/img/2026-09-30-language-grounding-commonsense/r1-p2-arch.png"
+class="img-fluid rounded z-depth-1"
+caption="Overview of LLM-MCTS. For each simulation in the MCTS, sample from the commonsense belief to obtain an initial state of the world and use the LLM as heuristics to guide the trajectory to promising parts of the search tree."
+%}
+
+In alignment with the described framework, an MCTS simulation works as follows \[Ref in Alg 1]: 
+
+1. Sample a state $$s$$ from the belief $$b(s)$$. \[Line 4]
+2. Select an action according to $$a^*$$, considering the $$Q$$ value, visit counts, and LLM policy. \[Line 29]
+3. MCTS expansion and random rollout returns a reward estimate. \[Line 14-17] 
+4. Backpropagate the accumulated rewards to update each node's estimated $$Q$$ value. \[Line 32-35]
+5. After $$N$$ simulations, the output is selected according to the highest $$Q$$ value. \[Line 3-8]
+6. Execute action, obseve, update belief.
+
+{% include figure.liquid path="assets/img/2026-09-30-language-grounding-commonsense/r1-p2-alg1.png"
+class="img-fluid rounded z-depth-1"
+%}
+
+### Results
+
+#### Setup
+Data was generated from 2000 tasks with randomly initialized scenes and expert trajectories, and the framework was evaluated on 800 tasks in VirtualHome. Task types included *Simple* (rearrange one item from same distribution as dataset), *Comp.* (composition of simple tasks / rearrange multiple items), *Novel Simple* (tasks with seen items in novel task descriptions), and *NovelComp(2)* and *NovelComp(3)* (seen items in novel compositional task descriptions).  
+
+**Success** is defined as completing the tasks within 30 steps, where completion is when all requirements of the object positions are satisfied.
+
+**Baselines** include UCT <d-cite key="kocsis2006bandit"></d-cite> (planning without commonsense knowledge with ground-truth reward function), Finetuned GPT2 <d-cite key="li2022pretrained"></d-cite> (trained on 10,000 trajectories from training dataset), and GPT3.5 Policy <d-cite key="huang2022language"></d-cite> (LLM used as the policy only / no MCTS).
+
+#### Results
+
+{% include figure.liquid path="assets/img/2026-09-30-language-grounding-commonsense/r1-p2-table1.png"
+class="img-fluid rounded z-depth-1"
+%}
+
+- MCTS without LLM (UCT) fails due to intractability – poor model and huge search tree.
+- All other methods do reasonably well on Simple tasks, but the LLM-MCTS well-outperforms as tasks complexify.
+- Fine-tuning compromises generalizability, and long-horizon planning introduces error accumulation which may not be included in prompt examples; MCTS encourages exploration.
+
+**Ablation**: To evaluate individual component contributions, the authors ran an ablation study:
+
+{% include figure.liquid path="assets/img/2026-09-30-language-grounding-commonsense/r1-p2-table2.png"
+class="img-fluid rounded z-depth-1"
+%}
+
+- *No heuristic policy*: 0% in all cases; cannot efficiently conduct search for large-scale planning tasks.
+- *Uniform state prior*: incorrect world models compromise search performance.
+- *Fully observable*: marginal improvement over practical counterpart without full-observability.
+
+### Discussion
+
+**When is using an LLM as a model better than as a policy?** Minimum description length (MDL) principle / Occam’s Razor: 
+> **If two methods fit the training data well, choose the method that has a shorter description.**
+
+*Takeaway*: When the world is simpler to describe than the behavior, use the LLM as a world model and use a planner for reasoning, and vice versa. 
 
 ---
 
