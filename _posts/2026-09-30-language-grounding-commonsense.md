@@ -65,7 +65,7 @@ Language grounding and commonsense reasoning serve a similar purpose when applie
 A very common and popular problem application is household robotics, where a robot is assisting or completing a task for a human user. Given the variety of house layouts and potential tasks it is reasonably to use language grounding to ensure proposed subtasks are relevant and achievable<d-cite key="liu_grounding_2023"></d-cite> and commonsense reasoning to clear up ambiguity of task descriptions<d-cite key="kwon_toward_2024"></d-cite>.
 
 {% include figure.liquid
-   path="assets/img/2026-09-30-language-grounding-commonsense/grounded_commonsense.png"
+   path="assets/img/2026-09-30-language-grounding-commonsense/grounded-commonsense.png"
    class="img-fluid rounded z-depth-1"
    caption="Figure 1: A household task of cleaning up a desk iterates between a VLM and LLM to infer the true task by reducing task ambiguity with self prompting and active perception. This allows an LLM to determine what subtasks should be completed to achieve the direct task (Kwon et al., 2024)."
 %}
