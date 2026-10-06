@@ -20,6 +20,14 @@ toc:
   - name: "Introduction"
   - name: "Language Grounding"
   - name: "Commonsense Reasoning"
+    subsections:
+    - name: "LLM as a Policy vs. World Model"
+    - name: "Problem Setup"
+    - name: "LLM as a Commonsense World Model"
+    - name: "LLM as a Heuristic Policy"
+    - name: "Integration with Monte-Carlo Tree Search (MCTS)"
+    - name: "Results"
+    - name: "Discussion"
   - name: "Applications and Limitations"
     subsections:
       - name: "Applications"
