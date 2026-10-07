@@ -6,3 +6,171 @@
   pages={25--55},
   year={2020}
 }
+
+@inproceedings{kocsis2006bandit, 
+title={Bandit based Monte-Carlo planning}, author={Kocsis, Levente and Szepesv{\'a}ri, Csaba}, 
+booktitle={Machine Learning: ECML 2006: 17th European Conference on Machine Learning, Berlin, Germany, September 18-22, 2006. Proceedings 17}, 
+pages={282--293}, 
+year={2006}, 
+organization={Springer} 
+} 
+
+@inproceedings{li2022pretrained, 
+title={Pre-trained language models for interactive decision-making}, 
+author={Li, Shuang and Puig, Xavier and Paxton, Chris and Du, Yilun and Wang, Clinton and Fan, Linxi and Chen, Tao and Huang, De-An and Aky{\"u}rek, Ekin and Anandkumar, Anima and others}, 
+booktitle={Advances in Neural Information Processing Systems}, 
+volume={35}, 
+pages={31199--31212}, 
+year={2022} 
+}
+
+@inproceedings{huang2022language, 
+title={Language models as zero-shot planners: Extracting actionable knowledge for embodied agents}, 
+author={Huang, Wenlong and Abbeel, Pieter and Pathak, Deepak and Mordatch, Igor}, 
+booktitle={International Conference on Machine Learning}, 
+pages={9118--9147}, 
+year={2022}, 
+organization={PMLR} 
+} 
+
+@misc{ahn_saycan_2022,
+	title = {Do As I Can, Not As I Say: Grounding Language in Robotic Affordances},
+	shorttitle = {Do As I Can, Not As I Say},
+	url = {http://arxiv.org/abs/2204.01691},
+	doi = {10.48550/arXiv.2204.01691},
+	abstract = {Large language models can encode a wealth of semantic knowledge about the world. Such knowledge could be extremely useful to robots aiming to act upon high-level, temporally extended instructions expressed in natural language. However, a significant weakness of language models is that they lack real-world experience, which makes it difficult to leverage them for decision making within a given embodiment. For example, asking a language model to describe how to clean a spill might result in a reasonable narrative, but it may not be applicable to a particular agent, such as a robot, that needs to perform this task in a particular environment. We propose to provide real-world grounding by means of pretrained skills, which are used to constrain the model to propose natural language actions that are both feasible and contextually appropriate. The robot can act as the language model's "hands and eyes," while the language model supplies high-level semantic knowledge about the task. We show how low-level skills can be combined with large language models so that the language model provides high-level knowledge about the procedures for performing complex and temporally-extended instructions, while value functions associated with these skills provide the grounding necessary to connect this knowledge to a particular physical environment. We evaluate our method on a number of real-world robotic tasks, where we show the need for real-world grounding and that this approach is capable of completing long-horizon, abstract, natural language instructions on a mobile manipulator. The project's website and the video can be found at https://say-can.github.io/.},
+	urldate = {2026-10-03},
+	publisher = {arXiv},
+	author = {Ahn, Michael and Brohan, Anthony and Brown, Noah and Chebotar, Yevgen and Cortes, Omar and David, Byron and Finn, Chelsea and Fu, Chuyuan and Gopalakrishnan, Keerthana and Hausman, Karol and Herzog, Alex and Ho, Daniel and Hsu, Jasmine and Ibarz, Julian and Ichter, Brian and Irpan, Alex and Jang, Eric and Ruano, Rosario Jauregui and Jeffrey, Kyle and Jesmonth, Sally and Joshi, Nikhil J. and Julian, Ryan and Kalashnikov, Dmitry and Kuang, Yuheng and Lee, Kuang-Huei and Levine, Sergey and Lu, Yao and Luu, Linda and Parada, Carolina and Pastor, Peter and Quiambao, Jornell and Rao, Kanishka and Rettinghouse, Jarek and Reyes, Diego and Sermanet, Pierre and Sievers, Nicolas and Tan, Clayton and Toshev, Alexander and Vanhoucke, Vincent and Xia, Fei and Xiao, Ted and Xu, Peng and Xu, Sichun and Yan, Mengyuan and Zeng, Andy},
+	month = aug,
+	year = {2022},
+	note = {arXiv:2204.01691 [cs.RO]},
+	keywords = {Computer Science - Computation and Language, Computer Science - Machine Learning, Computer Science - Robotics},
+}
+
+@inproceedings{zhao_llmmcts_2023,
+	title = {Large Language Models as Commonsense Knowledge for Large-Scale Task Planning},
+	volume = {36},
+	url = {https://proceedings.neurips.cc/paper_files/paper/2023/hash/65a39213d7d0e1eb5d192aa77e77eeb7-Abstract-Conference.html},
+	doi = {10.52202/075280-1387},
+	abstract = {Large-scale task planning is a major challenge.  Recent work exploits large  language models (LLMs) directly as a policy and shows surprisingly  interesting results.  This paper shows that LLMs provide a  commonsense model of the world in addition to a policy that acts on it.  The world model and the policy can be combined in a search  algorithm, such as Monte Carlo Tree Search (MCTS), to scale up task  planning.  In our new LLM-MCTS algorithm, the LLM-induced world model  provides a commonsense prior belief for MCTS to achieve effective reasoning;  the LLM-induced policy acts as a heuristic to guide the search, vastly  improving search efficiency. Experiments show that LLM-MCTS outperforms  both MCTS alone and policies induced by LLMs (GPT2 and GPT3.5) by a wide  margin, for complex, novel tasks.   Further experiments and analyses on multiple tasks --  multiplication, travel planning, object rearrangement --  suggest minimum description length (MDL)  as a general guiding principle: if the  description length of the world model is substantially smaller than that of  the  policy, using LLM as a world model for model-based planning is likely better  than using LLM solely as a policy.},
+	urldate = {2026-10-03},
+	booktitle = {Advances in Neural Information Processing Systems},
+	publisher = {Curran Associates, Inc.},
+	author = {Zhao, Zirui and Lee, Wee Sun and Hsu, David},
+	year = {2023},
+	pages = {31967--31987},
+}
+
+@inproceedings{black_pi0_2025,
+	address = {Los Angeles, CA, USA},
+	title = {π₀: A Vision-Language-Action Flow Model for General Robot Control},
+	doi = {10.15607/RSS.2025.XXI.010},
+	booktitle = {Proceedings of Robotics: Science and Systems},
+	author = {Black, Kevin and Brown, Noah and Driess, Danny and Esmail, Adnan and Equi, Michael Robert and Finn, Chelsea and Fusai, Niccolo and Groom, Lachy and Hausman, Karol and Ichter, Brian and Jakubczak, Szymon and Jones, Tim and Ke, Liyiming and Levine, Sergey and Li-Bell, Adrian and Mothukuri, Mohith and Nair, Suraj and Pertsch, Karl and Shi, Lucy Xiaoyang and Smith, Laura and Tanner, James and Vuong, Quan and Walling, Anna and Wang, Haohuan and Zhilinsky, Ury},
+	month = jun,
+	year = {2025},
+	url = {https://www.roboticsproceedings.org/rss21/p010.pdf}
+}
+
+@misc{beyer_paligemma_2024,
+	title = {PaliGemma: A versatile 3B VLM for transfer},
+	shorttitle = {PaliGemma},
+	url = {http://arxiv.org/abs/2407.07726},
+	doi = {10.48550/arXiv.2407.07726},
+	abstract = {PaliGemma is an open Vision-Language Model (VLM) that is based on the SigLIP-So400m vision encoder and the Gemma-2B language model. It is trained to be a versatile and broadly knowledgeable base model that is effective to transfer. It achieves strong performance on a wide variety of open-world tasks. We evaluate PaliGemma on almost 40 diverse tasks including standard VLM benchmarks, but also more specialized tasks such as remote-sensing and segmentation.},
+	urldate = {2026-10-03},
+	publisher = {arXiv},
+	author = {Beyer, Lucas and Steiner, Andreas and Pinto, André Susano and Kolesnikov, Alexander and Wang, Xiao and Salz, Daniel and Neumann, Maxim and Alabdulmohsin, Ibrahim and Tschannen, Michael and Bugliarello, Emanuele and Unterthiner, Thomas and Keysers, Daniel and Koppula, Skanda and Liu, Fangyu and Grycner, Adam and Gritsenko, Alexey and Houlsby, Neil and Kumar, Manoj and Rong, Keran and Eisenschlos, Julian and Kabra, Rishabh and Bauer, Matthias and Bošnjak, Matko and Chen, Xi and Minderer, Matthias and Voigtlaender, Paul and Bica, Ioana and Balazevic, Ivana and Puigcerver, Joan and Papalampidi, Pinelopi and Henaff, Olivier and Xiong, Xi and Soricut, Radu and Harmsen, Jeremiah and Zhai, Xiaohua},
+	month = oct,
+	year = {2024},
+	note = {arXiv:2407.07726 [cs.CV]},
+	keywords = {Computer Science - Artificial Intelligence, Computer Science - Computation and Language, Computer Science - Computer Vision and Pattern Recognition, Computer Science - Machine Learning},
+}
+
+@book{mehrabian_nonverbal_1972,
+	address = {New York},
+	title = {Nonverbal Communication},
+	isbn = {978-1-351-30872-4},
+	doi = {10.4324/9781351308724},
+	abstract = {Even though our society subtly discourages the verbal expression of emotions, most of us, in ostensibly conforming to our roles, nevertheless manage to express likes, dislikes, status differences, personalities, as well as weaknesses in nonverbal ways. Using vocal expressions; gestures, postures, and movements, we amplify, restrict, or deny what our words say to one another, and even say some things with greater facility and efficiency than with words.In this new, multidimensional approach to the subject of nonverbal communication Albert Mehrabian brings together a great deal of original work which includes descriptions of new experimental methods that are especially suited to this field, detailed findings of studies scattered throughout the literature, and most importantly, the integration of these findings within a compact framework.The framework starts with the analysis of the meanings of various nonverbal behaviors and is based on the fact that more than half of the variance in the significance of nonverbal signals can be described in terms of the three orthogonal dimensions of positiveness, potency or status, and responsiveness. These three dimensions not only constitute the semantic space for nonverbal communication, but also help to identify groups of behaviors relating to each, to describe characteristic differences in nonverbal communication, to analyze and generate rules for the understanding of inconsistent messages, and to provide researchers with new and comprehensive measures for description of social behavior.This volume will be particularly valuable for both the professional psychologist and the graduate student in psychology. It will also be of great interest to professionals in the fields of speech and communication, sociology, anthropology, and psychiatry.},
+	publisher = {Routledge},
+	author = {Mehrabian, Albert},
+	month = jul,
+	year = {1972},
+}
+
+
+@article{rissanen_modeling_1978,
+	title = {Modeling by shortest data description},
+	volume = {14},
+	issn = {0005-1098},
+	url = {https://www.sciencedirect.com/science/article/pii/0005109878900055},
+	doi = {10.1016/0005-1098(78)90005-5},
+	abstract = {The number of digits it takes to write down an observed sequence x1, …, xN of a time series depends on the model with its parameters that one assumes to have generated the observed data. Accordingly, by finding the model which minimizes the description length one obtains estimates of both the integer-valued structure parameters and the real-valued system parameters.},
+	number = {5},
+	urldate = {2026-10-04},
+	journal = {Automatica},
+	author = {Rissanen, J.},
+	month = sep,
+	year = {1978},
+	keywords = {identification, Modeling, parameter estimation, statistics, stochastic systems},
+	pages = {465--471},
+}
+
+@article{grunwald_minimum_2019,
+	title = {Minimum Description Length Revisited},
+	volume = {11},
+	issn = {2661-3352, 2661-3344},
+	url = {http://arxiv.org/abs/1908.08484},
+	doi = {10.1142/S2661335219300018},
+	abstract = {This is an up-to-date introduction to and overview of the Minimum Description Length (MDL) Principle, a theory of inductive inference that can be applied to general problems in statistics, machine learning and pattern recognition. While MDL was originally based on data compression ideas, this introduction can be read without any knowledge thereof. It takes into account all major developments since 2007, the last time an extensive overview was written. These include new methods for model selection and averaging and hypothesis testing, as well as the first completely general definition of \{{\textbackslash}em MDL estimators\}. Incorporating these developments, MDL can be seen as a powerful extension of both penalized likelihood and Bayesian approaches, in which penalization functions and prior distributions are replaced by more general luckiness functions, average-case methodology is replaced by a more robust worst-case approach, and in which methods classically viewed as highly distinct, such as AIC vs BIC and cross-validation vs Bayes can, to a large extent, be viewed from a unified perspective.},
+	number = {01},
+	urldate = {2026-10-04},
+	journal = {International Journal of Mathematics for Industry},
+	author = {Grünwald, Peter and Roos, Teemu},
+	month = dec,
+	year = {2019},
+	note = {arXiv:1908.08484 [stat.ME]},
+	keywords = {Computer Science - Information Theory, Computer Science - Machine Learning, Statistics - Machine Learning, Statistics - Methodology},
+	pages = {1930001},
+}
+
+
+@book{shwartz_understanding_2014,
+	address = {Cambridge},
+	title = {Understanding Machine Learning: From Theory to Algorithms},
+	isbn = {978-1-107-05713-5},
+	doi = {10.1017/CBO9781107298019},
+	abstract = {Machine learning is one of the fastest growing areas of computer science, with far-reaching applications. The aim of this textbook is to introduce machine learning, and the algorithmic paradigms it offers, in a principled way. The book provides a theoretical account of the fundamentals underlying machine learning and the mathematical derivations that transform these principles into practical algorithms. Following a presentation of the basics, the book covers a wide array of central topics unaddressed by previous textbooks. These include a discussion of the computational complexity of learning and the concepts of convexity and stability; important algorithmic paradigms including stochastic gradient descent, neural networks, and structured output learning; and emerging theoretical concepts such as the PAC-Bayes approach and compression-based bounds. Designed for advanced undergraduates or beginning graduates, the text makes the fundamentals and algorithms of machine learning accessible to students and non-expert readers in statistics, computer science, mathematics and engineering.},
+	publisher = {Cambridge University Press},
+	author = {Shalev-Shwartz, Shai and Ben-David, Shai},
+	year = {2014},
+}
+
+
+@inproceedings{kwon_toward_2024,
+	title = {Toward Grounded Commonsense Reasoning},
+	url = {https://ieeexplore.ieee.org/document/10611218},
+	doi = {10.1109/ICRA57147.2024.10611218},
+	abstract = {Consider a robot tasked with tidying a desk with a meticulously constructed Lego sports car. A human may recognize that it is not appropriate to disassemble the sports car and put it away as part of the "tidying." How can a robot reach that conclusion? Although large language models (LLMs) have recently been used to enable commonsense reasoning, grounding this reasoning in the real world has been challenging. To reason in the real world, robots must go beyond passively querying LLMs and actively gather information from the environment that is required to make the right decision. For instance, after detecting that there is an occluded car, the robot may need to actively perceive the car to know whether it is an advanced model car made out of Legos or a toy car built by a toddler. We propose an approach that leverages an LLM and vision language model (VLM) to help a robot actively perceive its environment to perform grounded commonsense reasoning. To evaluate our framework at scale, we release the MessySurfaces dataset which contains images of 70 real-world surfaces that need to be cleaned. We additionally illustrate our approach with a robot on 2 carefully designed surfaces. We find an average 12.9\% improvement on the MessySurfaces benchmark and an average 15\% improvement on the robot experiments over baselines that do not use active perception. The dataset, code, and videos of our approach can be found at https://minaek.github.io/grounded\_commonsense\_reasoning/.},
+	urldate = {2026-10-05},
+	booktitle = {2024 IEEE International Conference on Robotics and Automation (ICRA)},
+	author = {Kwon, Minae and Hu, Hengyuan and Myers, Vivek and Karamcheti, Siddharth and Dragan, Anca and Sadigh, Dorsa},
+	month = may,
+	year = {2024},
+	keywords = {Automobiles, Grounding, Large language models, Pediatrics, Robots, Task analysis, Toy manufacturing industry},
+	pages = {5463--5470},
+}
+
+@misc{liu_grounding_2023,
+	title = {Grounding Complex Natural Language Commands for Temporal Tasks in Unseen Environments},
+	url = {https://arxiv.org/abs/2302.11649v2},
+	abstract = {Grounding navigational commands to linear temporal logic (LTL) leverages its unambiguous semantics for reasoning about long-horizon tasks and verifying the satisfaction of temporal constraints. Existing approaches require training data from the specific environment and landmarks that will be used in natural language to understand commands in those environments. We propose Lang2LTL, a modular system and a software package that leverages large language models (LLMs) to ground temporal navigational commands to LTL specifications in environments without prior language data. We comprehensively evaluate Lang2LTL for five well-defined generalization behaviors. Lang2LTL demonstrates the state-of-the-art ability of a single model to ground navigational commands to diverse temporal specifications in 21 city-scaled environments. Finally, we demonstrate a physical robot using Lang2LTL can follow 52 semantically diverse navigational commands in two indoor environments.},
+	language = {en},
+	urldate = {2026-10-05},
+	journal = {arXiv.org},
+	author = {Liu, Jason Xinyu and Yang, Ziyi and Idrees, Ifrah and Liang, Sam and Schornstein, Benjamin and Tellex, Stefanie and Shah, Ankit},
+	month = feb,
+	year = {2023},
+}
