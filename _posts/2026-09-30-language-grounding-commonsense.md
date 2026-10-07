@@ -19,6 +19,11 @@ bibliography: 2026-09-30-language-grounding-commonsense.bib
 toc:
   - name: "Introduction"
   - name: "Language Grounding"
+    subsections:
+    - name: "Do As I Can, Not As I Say: Grounding Language in Robotic Affordances"
+    - name: "Execution"
+    - name: "Explainability"
+    - name: "Language Grounding Results"
   - name: "Commonsense Reasoning"
     subsections:
     - name: "LLM as a Policy vs. World Model"
@@ -26,7 +31,7 @@ toc:
     - name: "LLM as a Commonsense World Model"
     - name: "LLM as a Heuristic Policy"
     - name: "Integration with Monte-Carlo Tree Search (MCTS)"
-    - name: "Results"
+    - name: "Commonsense Reasoning Evaluation"
     - name: "Discussion"
   - name: "Applications and Limitations"
     subsections:
@@ -39,74 +44,75 @@ toc:
 ---
 
 ## Introduction {#introduction}
+
 Large language models (LLMs) are exposed to multiple different semantic contexts through its vast pretraining dataset, enabling these models to gain an extensive knowledge base of the real world. Thus, a central question is how can an autonomous agent use an LLM's knowledge to carry out multi-step instructions in a world that it must interact with? Ideally, the LLM's advanced understanding of the world would greatly benefit autonomous agents, such as using common sense to find the desired object or selecting the correct next action.
 
 However, there two major challenges when integrating LLMs into autonomous agents:
+
 - LLM responses are conversational, so they cannot be directly used as actions for the robot to perform. Furthermore, these models do not have access to the available actions of the robot, resulting in semantically correct but unfeasible instructions.
 - LLMs sequentially predict the best immediate action without considering the results of alternative actions. This can result in failures compounding if the LLM chooses the wrong action early on. This issue is exacerbated when there is a vast number of possibilities in the search space.
 
 This lecture explores two different approaches to address the challenges:
-- **Do As I Can, Not As I Say: Grounding Language in Robotic Affordances:** Rather than directly allowing the LLM to provide the next action, SayCan introduces a learned value function that computes the affordance score. This score represents which actions are feasible given the robot's abilities. Then, combining the LLM and the affordance score enables the robot to select the skill that is not only useful towards the goal but also attainable.
-- **Large Language Models as Commonsense Knowledge for Large-Scale Task Planning:** To address the second challenge, LLM-MCTS combines the LLM's commonsense knowledge with Monte Carlo Tree Search (MCTS) to search for the best future. The LLM is used in two aspects. First, the model is used to construct a world model, acting as the initial belief of where objects are possibly located. Second, when the agent is working towards a task goal, MCTS is used to search for the best next action, using the LLM to bias the search towards the most likely actions. This narrows the search space to only explore the futures that could lead to successful outcomes.
+
+- **Do As I Can, Not As I Say: Grounding Language in Robotic Affordances <d-cite key="ahn_saycan_2022"></d-cite>:** Rather than directly allowing the LLM to provide the next action, SayCan introduces a learned value function that computes the affordance score. This score represents which actions are feasible given the robot's abilities. Then, combining the LLM and the affordance score enables the robot to select the skill that is not only useful towards the goal but also attainable.
+- **Large Language Models as Commonsense Knowledge for Large-Scale Task Planning <d-cite key="zhao_llmmcts_2023"></d-cite>:** To address the second challenge, LLM-MCTS combines the LLM's commonsense knowledge with Monte Carlo Tree Search (MCTS) to search for the best future. The LLM is used in two aspects. First, the model is used to construct a world model, acting as the initial belief of where objects are possibly located. Second, when the agent is working towards a task goal, MCTS is used to search for the best next action, using the LLM to bias the search towards the most likely actions. This narrows the search space to only explore the futures that could lead to successful outcomes.
+
 ---
 
 ## Language Grounding {#language-grounding}
 
-This lecture report covers the **Language Grounding & Commonsense** session in *Learning for Interactive Robots (CS 6501, Fall 2026)* at the University of Virginia.
+Large Language Models can be a powerful tool in translating a simple instruction or goal into a set of concrete steps a robot can take to achieve that goal. Through training on massive amounts of data they are able to identify ambiguous relationships and adapt to many scenarios. Despite their ability to understand deep semantic relationships and make inferences that aren't explicitly stated in the instruction they still lack knowledge of the specific environment a robot is or its abilities to complete any given subtask.
 
-> **Topic Overview**: Grounding natural language commands into physical environments, spatial relationships, and affordance-aware commonsense reasoning.
+### Do As I Can, Not As I Say: Grounding Language in Robotic Affordances
 
-Large Language Models can be a powerful tool in translating a simple instruction or goal into a set of concrete steps a robot can take to achieve that goal. Through training on massive amounts of data they are able to identify ambiguous relationships and adapt to many scenarios. Despite their ability to understand deep semantic relationships and make inferences that aren't explicitly stated in the instruction they still lack knowledge of the specific environment a robot is or its abilities to complete any given subtask. 
-
-### Do As I Can, Not As I Say: Grounding Language in Robotic Affordances <d-cite key="ahn_saycan_2022"></d-cite>
-
-SayCan solves this problem with *Language Grounding*, which tells the LLM the abilities of the robot, its current state, and the state of the scene the robot is acting in. They break down the abilities of the robot into a list of predefined subtasks such as "pick up object", or "go to the sink". For each of these skills they use the LLM to estimate the probability that completing that task will increase progress towards goal, and they use an affordance function to get the probability the skill can be completed given the current state. This combined probability of a skill successfully making progress on the instruction is factorized as:
+SayCan <d-cite key="ahn_saycan_2022"></d-cite> solves this problem with *Language Grounding*, which tells the LLM the abilities of the robot, its current state, and the state of the scene the robot is acting in. They break down the abilities of the robot into a list of predefined subtasks such as "pick up object", or "go to the sink". For each of these skills they use the LLM to estimate the probability that completing that task will increase progress towards goal, and they use an affordance function to get the probability the skill can be completed given the current state. This combined probability of a skill successfully making progress on the instruction is factorized as:
 
 $$p(c_i|i,s,l_\pi) \propto p(c_\pi|s,l_\pi) p(l_\pi|i)$$
 
-where $p(l_\pi|i)$ represents task-grounding from the LLM and $p(c_\pi|s,l_\pi)$ represents world-grounding from the affordance function.
+where $p(l_\pi\vert i)$ represents task-grounding from the LLM and $p(c_\pi\vert s,l_\pi)$ represents world-grounding from the affordance function.
 
-The set of skills gives the LLM context on the robots abilities, and the affordance function gives the robot context on the environment. 
+The set of skills gives the LLM context on the robots abilities, and the affordance function gives the robot context on the environment.
 
 SayCan uses RL and BC to learn both the skills and the affordance function. The learning policies are trained using sparse rewards, where 1.0 is given for success, and 0.0 for failure. This means that the learned value function is the same as an affordance function. The LLM used was 540B parameter PaLM.
 
-#### Execution 
+#### Execution
+
 Given the initial instruction, the set of skills the robot can perform, and the affordance function, SayCan evaluates each skill using the LLM to give a probability that skill progresses, and using the affordance function to give probability of completion. At each step it choses the skill with the highest combined probability, determining the optimal skill via:
 
 $$\pi = \arg\max_{\pi \in \Pi} p(c_\pi|s,l_\pi) p(l_\pi|i)$$
 
 and then the next skills are chosen with the new state of the robot and environment. This is repeated until the task is completed.
 
-In order to handle a wider range of tasks such as negations, they introduced chain of though reasoning. They instructed to model to explain how it scores each of the skills which improves its reasoning and performance on instructions like "bring me a snack that isn't an apple". 
+In order to handle a wider range of tasks such as negations, they introduced chain of though reasoning. They instructed to model to explain how it scores each of the skills which improves its reasoning and performance on instructions like "bring me a snack that isn't an apple".
 
 #### Explainability
-By using a LLM to decide each step in natural language, they produce a plan that is extremely interpretable. 
 
-Under an ablation study that swaps out the LLM for smaller versions of PaLM, or for FLAN they show that as the LLM improves, SayCan's performance increases without having to retrain the skills. For example, using the 137B FLAN model resulted in a 70% planning success rate and 61% execution success rate, whereas the 540B PaLM model achieved 84% planning and 74% execution. 
+By using a LLM to decide each step in natural language, they produce a plan that is extremely interpretable.
+
+Under an ablation study that swaps out the LLM for smaller versions of PaLM, or for FLAN they show that as the LLM improves, SayCan's performance increases without having to retrain the skills. For example, using the 137B FLAN model resulted in a 70% planning success rate and 61% execution success rate, whereas the 540B PaLM model achieved 84% planning and 74% execution.
 
 Not only can they improve the performance of SayCan by dropping in a new improved LLM, but if they need to add new skills for a different environment they can just add it into the LLM's prompt. The huge depth of knowledge the LLMs have been trained on allows for huge adaptability in tasks SayCan hasn't been initially designed for.
 
-#### Results
+#### Language Grounding Results
+
 PaLM-SayCan was able to achieve 84% planning success, and 74% execution success in the mock kitchen, with a 3% drop in planning and 14% drop in execution when testing in the real kitchen. It struggles the most with long horizon tasks that would take many intermediate steps, but the LLM will often terminate early. Ablations also proved the necessity of both systems: removing the affordance value functions (No VF) dropped planning success to 67%, while removing the language model entirely (BC NL) resulted in a 0% success rate across all tasks.
-
-
-
 
 ---
 
 ## Commonsense Reasoning {#commonsense-reasoning}
 
-Given the wealth of commonsense knowledge encoded by Large language models, this next work explores the usefulness of LLMs as a policy versus a world model, proposing LLM-MCTS – an architecture that leverages this knowledge in both the model building and as a search heuristic in action selection. 
+Given the wealth of commonsense knowledge encoded by Large language models, this next work explores the usefulness of LLMs as a policy versus a world model, proposing LLM-MCTS – an architecture that leverages this knowledge in both the model building and as a search heuristic in action selection.
 
 ### LLM as a Policy vs. World Model
 
-**Motivating Example**: An autonomous robot butler in a household environment. Consider asking the robot to put fruits in the fridge. Our commonsense reasoning allows us to narrow the vast search space of movable items and locations to likely considerations – the kitchen counter or cupboard as opposed to the bedroom closet. 
+**Motivating Example**: An autonomous robot butler in a household environment. Consider asking the robot to put fruits in the fridge. Our commonsense reasoning allows us to narrow the vast search space of movable items and locations to likely considerations – the kitchen counter or cupboard as opposed to the bedroom closet.
 
 This work defines two means of utilizing an LLM in task planning:
+
 - **L-Policy**: Given the history of past actions and observations, treat the LLM as a policy and query it directly for the next actions.
 - **L-Model**: Use LLM’s commonsense knowledge to build a world model and apply a planning algorithm to the model.
 
-L-Policy shows limitations regarding generalization, while L-Model performance depends on world model accuracy and planning algorithm efficiency. This paper combines the ideas of both to outperform either alone. 
+L-Policy shows limitations regarding generalization, while L-Model performance depends on world model accuracy and planning algorithm efficiency. This paper combines the ideas of both to outperform either alone.
 
 ### Problem Setup
 
@@ -126,7 +132,7 @@ $$
 - Reward Function: ($$R$$): reward for achieving the desire item arrangement
 - Discount Factor ($$\gamma$$): discount factor on future rewards
 
-The robot acts on the history of past observations and actions $$h_t = \left(o_0, a_0, o_1, a_1, \ldots, o_{t-1}, a_{t-1}  \right)$$, with the goal of maximizing an expected cumulative reward: 
+The robot acts on the history of past observations and actions $$h_t = \left(o_0, a_0, o_1, a_1, \ldots, o_{t-1}, a_{t-1}  \right)$$, with the goal of maximizing an expected cumulative reward:
 
 $$
 \pi^*\left(h_t\right) = \arg\max_{a \in A} \mathbb{E} [\sum_{i=0}^\infty \gamma^i R \left( s_{t+i}, a_{t+i} | a_t = a\right)].
@@ -136,9 +142,9 @@ $$
 
 ### LLM as a Commonsense World Model
 
-The approach uses an LLM's commonsense knowledge to generate initial beliefs over object locations thus prioritizing search to more appropriate locations. Prompting details are as follows: Given expert actions and observations in similar environments, the LLMs are prompted to sample object positions $$M$$ times. Each time, according to a fixed prompt, it is asked to predict the position of an object. The response is then encoded and mapped to objects in the dataset. The sampled answers are counted and normalized to form a probability distribution over each object's location. 
+The approach uses an LLM's commonsense knowledge to generate initial beliefs over object locations thus prioritizing search to more appropriate locations. Prompting details are as follows: Given expert actions and observations in similar environments, the LLMs are prompted to sample object positions $$M$$ times. Each time, according to a fixed prompt, it is asked to predict the position of an object. The response is then encoded and mapped to objects in the dataset. The sampled answers are counted and normalized to form a probability distribution over each object's location.
 
-Beliefs are maintained in object-centric graphs where the abstract-level relationships are the edges connecting objects (nodes). 
+Beliefs are maintained in object-centric graphs where the abstract-level relationships are the edges connecting objects (nodes).
 
 ### LLM as a Heuristic Policy
 
@@ -148,7 +154,7 @@ $$
 \hat{\pi}\left(a | h \right) = \lambda \frac{1}{|A|} + (1 - \lambda)\text{Softmax}\{\sum_{i=1}^M \text{CosineSim}\left(\alpha_i, a \right) - \eta\},
 $$
 
-where $$\eta$$ is the average cosine similarity value and $$\lambda$$ is a hyperparameter adding randomness such that the search is not entirely reliant on the LLM suggestion. 
+where $$\eta$$ is the average cosine similarity value and $$\lambda$$ is a hyperparameter adding randomness such that the search is not entirely reliant on the LLM suggestion.
 
 ### Integration with Monte-Carlo Tree Search (MCTS)
 
@@ -164,15 +170,16 @@ In alignment with the described framework, an MCTS simulation works as follows \
 3. MCTS expansion and random rollout returns a reward estimate. \[Line 14-17] 
 4. Backpropagate the accumulated rewards to update each node's estimated $$Q$$ value. \[Line 32-35]
 5. After $$N$$ simulations, the output is selected according to the highest $$Q$$ value. \[Line 3-8]
-6. Execute action, obseve, update belief.
+6. Execute action, observe, update belief.
 
 {% include figure.liquid path="assets/img/2026-09-30-language-grounding-commonsense/r1-p2-alg1.png"
 class="img-fluid rounded z-depth-1"
 %}
 
-### Results
+### Commonsense Reasoning Evaluation
 
 #### Setup
+
 Data was generated from 2000 tasks with randomly initialized scenes and expert trajectories, and the framework was evaluated on 800 tasks in VirtualHome. Task types included *Simple* (rearrange one item from same distribution as dataset), *Comp.* (composition of simple tasks / rearrange multiple items), *Novel Simple* (tasks with seen items in novel task descriptions), and *NovelComp(2)* and *NovelComp(3)* (seen items in novel compositional task descriptions).  
 
 **Success** is defined as completing the tasks within 30 steps, where completion is when all requirements of the object positions are satisfied.
@@ -201,10 +208,10 @@ class="img-fluid rounded z-depth-1"
 
 ### Discussion
 
-**When is using an LLM as a model better than as a policy?** Minimum description length (MDL) principle / Occam’s Razor: 
+**When is using an LLM as a model better than as a policy?** Minimum description length (MDL) principle / Occam’s Razor:
 > **If two methods fit the training data well, choose the method that has a shorter description.**
 
-*Takeaway*: When the world is simpler to describe than the behavior, use the LLM as a world model and use a planner for reasoning, and vice versa. 
+*Takeaway*: When the world is simpler to describe than the behavior, use the LLM as a world model and use a planner for reasoning, and vice versa.
 
 ---
 
