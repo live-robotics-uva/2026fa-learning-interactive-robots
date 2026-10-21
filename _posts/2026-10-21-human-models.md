@@ -19,12 +19,12 @@ bibliography: 2026-10-21-human-models.bib
 
 toc:
   - name: "Introduction"
-    subsections:
-    - name: "Boltzmann Rationality"
-    - name: "Inferring Intent"
-    - name: "Bayesian Theory of Mind"
-    - name: "Markov Decision Process(MDP)"
-    - name: "Partially Observable Markov Decision Process(POMDP)"
+#    subsections:
+#    - name: "Boltzmann Rationality"
+#    - name: "Inferring Intent"
+#    - name: "Bayesian Theory of Mind"
+#    - name: "Markov Decision Process(MDP)"
+#    - name: "Partially Observable Markov Decision Process(POMDP)"
   - name: "LESS is More: Rethinking Probabilistic Models of Human Behavior"
     subsections:
         - name: "Motivation"
