@@ -64,12 +64,9 @@ toc:
 This lecture report covers the **Human Models** session in *Learning for Interactive Robots (CS 6501, Fall 2026)* at the University of Virginia. We explored how robots can understand, predict, and respond to human behavior when sharing an environment by reviewing two papers:
 
 -   **LESS is More: Rethinking Probabilistic Models of Human Behavior**<d-cite key="bobu2020less"></d-cite>:
-
 Traditional Boltzmann models can assign excessive probability to groups containing many nearly identical trajectories. LESS corrects this by accounting for trajectory similarity, improving human behavior modeling and certain inference tasks.
 
--   **Large Language Models as Zero-Shot Human Models for Human-Robot Interaction**<d-cite key="zhang2023large"></d-cite>:
-
-Investigates whether pretrained LLMs can predict human judgments, trust, and social responses without task-specific training. Results show promising performance, but limitations remain in spatial and physical reasoning.
+-   **Large Language Models as Zero-Shot Human Models for Human-Robot Interaction**<d-cite key="zhang2023large"></d-cite>:Investigates whether pretrained LLMs can predict human judgments, trust, and social responses without task-specific training. Results show promising performance, but limitations remain in spatial and physical reasoning.
 
 ### Why do we need human model?
 
