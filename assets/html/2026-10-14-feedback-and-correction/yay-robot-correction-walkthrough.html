@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>YAY Robot: from a correction to learning</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 18px; background: #fff; color: #203047; font: 15px/1.55 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+  main { max-width: 960px; margin: auto; }
+  h1 { margin: 0 0 4px; font-size: 23px; line-height: 1.25; }
+  .intro { margin: 0 0 16px; color: #536176; }
+  .stage-input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+  .steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-bottom: 16px; }
+  .steps label { display: flex; align-items: center; gap: 8px; padding: 10px; border: 2px solid #d3dce7; border-radius: 9px; font-weight: 600; cursor: pointer; line-height: 1.3; }
+  .number { display: inline-grid; place-items: center; flex-shrink: 0; width: 25px; height: 25px; border-radius: 50%; background: #e9eef5; }
+  #autonomous:checked ~ .steps label[for="autonomous"],
+  #correction:checked ~ .steps label[for="correction"],
+  #training:checked ~ .steps label[for="training"] { border-color: #205ac3; background: #edf3ff; color: #143e89; }
+  #autonomous:focus-visible ~ .steps label[for="autonomous"],
+  #correction:focus-visible ~ .steps label[for="correction"],
+  #training:focus-visible ~ .steps label[for="training"] { outline: 3px solid #202e46; outline-offset: 3px; }
+  figure { margin: 0; }
+  .diagram { position: relative; border: 1px solid #dce3ed; border-radius: 10px; overflow: hidden; background: white; }
+  .diagram img { display: block; width: 100%; height: auto; }
+  .diagram svg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+  .highlight { fill: none; stroke-width: 1.8; opacity: 0; }
+  .high, .low, .human { stroke: #205ac3; }
+  .learning { stroke: #aa4c00; stroke-width: 2; }
+  #autonomous:checked ~ figure .high,
+  #autonomous:checked ~ figure .low,
+  #correction:checked ~ figure .human,
+  #correction:checked ~ figure .low,
+  #training:checked ~ figure .learning { opacity: 1; }
+  #training:checked ~ figure .high { opacity: 1; stroke: #aa4c00; }
+  figcaption { margin: 8px 0 12px; color: #536176; font-size: 12px; }
+  a { color: #205ac3; }
+  .panel { display: none; padding: 16px 18px; border: 1px solid #d3dce7; border-left: 4px solid #205ac3; border-radius: 8px; background: #f7f9fc; }
+  #autonomous:checked ~ .panels .autonomous,
+  #correction:checked ~ .panels .correction,
+  #training:checked ~ .panels .training { display: block; }
+  .panel h2 { margin: 0 0 7px; font-size: 18px; line-height: 1.35; }
+  .panel p { margin: 8px 0; }
+  .panel.training { border-left-color: #aa4c00; }
+  .status { display: inline-block; margin: 6px 6px 0 0; padding: 4px 8px; border: 1px solid #bcc9dc; border-radius: 5px; background: white; font-size: 12px; font-weight: 600; }
+  .status.updated { color: #854000; border-color: #d6a278; }
+  .note { margin: 12px 0 0; color: #536176; font-size: 12px; }
+  @media (max-width: 560px) {
+    body { padding: 12px; font-size: 14px; }
+    h1 { font-size: 20px; }
+    .steps { grid-template-columns: 1fr; gap: 6px; }
+    .steps label { padding: 7px 10px; }
+    .panel { padding: 12px; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <h1>From a correction to learning</h1>
+  <p class="intro" id="instructions">Choose a stage to see what changes in YAY Robot. Use Tab to reach the controls and arrow keys to switch stages.</p>
+  <input class="stage-input" type="radio" name="stage" id="autonomous" checked aria-describedby="instructions">
+  <input class="stage-input" type="radio" name="stage" id="correction" aria-describedby="instructions">
+  <input class="stage-input" type="radio" name="stage" id="training" aria-describedby="instructions">
+  <div class="steps">
+    <label for="autonomous"><span class="number">1</span> Autonomous execution</label>
+    <label for="correction"><span class="number">2</span> Human correction</label>
+    <label for="training"><span class="number">3</span> Later fine-tuning</label>
+  </div>
+  <figure>
+    <div class="diagram">
+      <img src="../../img/2026-10-14-feedback-and-correction/yay-robot-figure-3-method-overview.png" width="2150" height="751" alt="Original YAY Robot overview: observations feed the high-level instruction selector and low-level motor controller. A human can override the instruction; saved corrections later train the high-level policy.">
+      <svg viewBox="0 0 516 180" aria-hidden="true" focusable="false">
+        <rect class="highlight high" x="239" y="6" width="101" height="48" rx="10" />
+        <rect class="highlight low" x="239" y="69" width="101" height="48" rx="10" />
+        <rect class="highlight human" x="384" y="23" width="103" height="70" rx="8" />
+        <path class="highlight learning" d="M 406 37 L 406 14 L 342 14 M 348 10 L 342 14 L 348 18" />
+      </svg>
+    </div>
+    <figcaption>Diagram reproduced from Shi et al. (2024), Figure 3. Blue outlines identify the components guiding execution; orange identifies the later training pathway. <a href="https://roboticsproceedings.org/rss20/p025.html" target="_blank" rel="noopener noreferrer">Original paper</a>.</figcaption>
+  </figure>
+  <div class="panels">
+    <section class="panel autonomous" aria-labelledby="autonomous-title">
+      <h2 id="autonomous-title">The policy selects an instruction</h2>
+      <p>The high-level policy observes the scene and selects an instruction, such as <strong>insert the object into the bag</strong>. The low-level controller uses that instruction, camera images, and joint information to produce motor actions.</p>
+      <p>If the insertion fails, repeating the intended task step may be insufficient. The robot may need an adjustment before it can continue.</p>
+      <span class="status">Instruction source: high-level policy</span>
+      <span class="status">No weight updates</span>
+    </section>
+    <section class="panel correction" aria-labelledby="correction-title">
+      <h2 id="correction-title">A human temporarily changes the instruction</h2>
+      <p>The person interrupts and gives a correction, such as <strong>move a little to the left</strong>. This overrides the high-level instruction; the same low-level controller executes the corrective skill.</p>
+      <p>The system records the observation history and human instruction as a correction example. The immediate behavior change comes from the new instruction, before any fine-tuning occurs.</p>
+      <span class="status">Instruction source: human</span>
+      <span class="status">Both policies' weights unchanged</span>
+    </section>
+    <section class="panel training" aria-labelledby="training-title">
+      <h2 id="training-title">Saved corrections train the high-level policy</h2>
+      <p>After collecting interactions, the system fine-tunes the high-level policy on the original dataset together with saved corrections. These examples teach the instruction selector which existing skills to choose in the situations that required help.</p>
+      <p>The low-level controller stays frozen. In future attempts, the updated high-level policy can select corrective instructions without a human having to repeat them; the controller's physical skill repertoire remains fixed.</p>
+      <span class="status updated">High-level policy: updated</span>
+      <span class="status">Low-level controller: frozen</span>
+    </section>
+  </div>
+  <p class="note">Illustrative walkthrough, not a robot simulation. Commands are explanatory examples rather than model predictions. The diagram explains the learning mechanism; it does not establish recovery on unseen failures.</p>
+</main>
+</body>
+</html>
