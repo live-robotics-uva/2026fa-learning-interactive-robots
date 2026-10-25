@@ -91,6 +91,148 @@ The lecture introduces several approaches:
 
 ## Large Language Models as Zero-Shot Human Models for Human-Robot Interaction
 
+### Motivation
+Human models enable robots to understand and reason about human behavior, allowing them to plan their actions while considering their potential impact on humans. However, existing methods face two main challenges:
+- **Limited flexibility and scalability** of handcrafted human models due to strong assumptions.
+- **High demand for human interaction data** in non-parametric models.
+
+To address these challenges, this paper explores the potential of **Large Language Models (LLMs) to serve as zero-shot human models for Human-Robot Interaction (HRI).** The authors demonstrate that LLMs, pretrained on vast amounts of human-generated text, can effectively model human latent states and behaviors. However, LLMs struggle with tasks requiring spatial and numerical reasoning. Additionally, their performance is sensitive to prompt phrasing and structure.
+
+To further explore the ability of LLMs, they integrate LLM-based human models into robot planning and evaluate them in two HRI scenarios: a table-clearing task and a utensil-passing task. The results show that LLM-based planning can mitigate human overtrust and improve task performance. Nonetheless, LLMs may need to be combined with low-level models that capture geometric and physical information.
+
+{% include figure.liquid
+   path="assets/img/2026-10-21-human-models/llm-human-model-figure-1-overview.png"
+   class="img-fluid rounded z-depth-1"
+   alt="Interaction history and the current state and robot action are textualized into a prompt. An LLM predicts a human action or state distribution, which a separate planner uses to obtain a robot policy."
+   caption="LLM-based human modeling and planning workflow."
+   zoomable=true
+%}
+
+<p style="text-align: center; font-size: 1.5em;"><strong>LLMs as zero-shot human models</strong></p>
+
+### Problem Definition
+
+Let $$s_t$$ denote the environment state at time $$t$$, where the environment contains $$N$$ agents (humans or robots), denoted as $$a^{(i)} \in \mathcal{A}, \quad i=1,\ldots,N$$. The interaction history is defined as
+
+$$
+h_t = \left\{ \left(s_k, \{u_k^{(i)}\}_i \right) \right\}_{k=1}^{t-1} \in \mathcal{H}
+$$
+
+where $$u_k^{(i)}$$ represents the action of agent $$i$$ at time $$k$$.
+
+The goal is to use LLMs to model a human agent's action or mental state, represented by $$z_t^H$$, such as trust in a robot or the decision to intervene. Specifically, the authors aim to approximate the conditional probability distribution:
+
+$$
+p(z_t^H \mid s_t,h_t).
+$$
+
+A textualization function $$f$$ transforms the environment state, interaction history, and set of agents $$\mathcal{A}$$ into a textual prompt:
+
+$$
+x_t = f(s_t,h_t,\mathcal{A})
+$$
+
+The LLM-based human model, denoted by $$p_l$$, then predicts the distribution of the target human property $$z_t^H$$ given the prompt $$x_t$$. The objective is to evaluate whether this predicted distribution can accurately approximate the true conditional distribution of human behavior or mental states:
+
+$$
+p_l(z_t^H\mid x_t)\approx p(z_t^H\mid s_t,h_t)
+$$
+
+### Experiment Setup
+
+**Models:** The prediction experiments compare **DAVINCI** (`text-davinci-003`, 175B) and **T5** (`FLAN-T5-XXL`, 11B). DAVINCI is accessed through an API, while T5 runs locally. 
+
+**Datasets:** This paper uses two HRI-related datasets and a human-human social interaction dataset. Each dataset has a different specialized baseline, trained or developed for that prediction problem. The datails of these datasets are shown below:
+
+| Dataset | Prediction task | This dataset is for | Baseline model |
+|---|---|---:|---|
+| <span style="position: relative; display: inline-block;">MANNERS-DB<d-cite key="tjomsland2022manners"></d-cite></span> | Social appropriateness of a robot action, rated from 1 to 5 | Evaluating whether LLM-based human models can capture the effects of physical and spatial features in HRI | BNN-16CL2 |
+| <span style="position: relative; display: inline-block;">Trust-Transfer<d-cite key="soh2018transfer"></d-cite></span> | Trust after observing robot demonstrations, rated from 1 to 7 | Evaluating whether LLMs can capture the effect of interaction history on a human's mental state | Gaussian Process and Neural Network (GPNN) |
+| SocialIQA | Social commonsense reasoning with three answer choices | Evaluating LLM's ability to reason about human social interactions | Fine-tuned BERT-large |
+
+**Prompts:** Prompts include task instructions, relevant environment information, interaction history where applicable, and a question about the human response. The LLMs receive textual descriptions rather than directly inspecting the scene images used in MANNERS-DB annotation. The examples of prompts in each dataset is shown below.
+
+{% include figure.liquid
+   path="assets/img/2026-10-21-human-models/llm-human-model-figure-2-datasets-prompts.png"
+   class="img-fluid rounded z-depth-1"
+   alt="Examples from MANNERS-DB, Trust-Transfer, and SocialIQA, showing each dataset scenario and the corresponding text prompt used to predict human judgments or responses."
+   caption="Datasets and example prompts used in the prediction experiments."
+   zoomable=true
+%}
+
+**Metrics:** The paper evaluates three aspects of a human model: the error in its predictions, agreement with human labels, and how well its predicted uncertainty matches the variation in human responses. These aspects are complementary: a model can predict the majority answer correctly while assigning an unrealistic probability distribution to the other answers. <d-cite key="zhang2023large"></d-cite>
+
+**1. Error score.** Let $$n$$ be the number of evaluation instances, $$y_i$$ the target numerical score for instance $$i$$, and $$\hat y_i$$ the model's predicted score. The regression metrics are:
+
+$$
+\begin{aligned}
+\operatorname{RMSE}
+&=\sqrt{\frac{1}{n}\sum_{i=1}^{n}(\hat y_i-y_i)^2},\\
+\operatorname{MAE}
+&=\frac{1}{n}\sum_{i=1}^{n}|\hat y_i-y_i|.
+\end{aligned}
+$$
+
+The paper uses **RMSE for MANNERS-DB** and **MAE for Trust-Transfer**. For **SocialIQA**, which has discrete answer choices, the error score is instead the fraction of incorrect predictions:
+
+$$
+\operatorname{ErrorRate}
+=\frac{1}{n}\sum_{i=1}^{n}\mathbf{1}[\hat c_i\neq c_i],
+$$
+
+where $$\hat c_i$$ is the predicted answer, $$c_i$$ is the correct answer, and $$\mathbf{1}[\cdot]$$ equals 1 when its condition holds and 0 otherwise. **Lower is better** for all three error metrics.
+
+**2. Consistency with Mode (CwM).** This metric measures agreement with the majority human label. Writing $$c_i^{\mathrm{human}}$$ for the human reference class and $$\hat c_i$$ for the model's corresponding class prediction gives:
+
+$$
+\operatorname{CwM}
+=\frac{1}{n}\sum_{i=1}^{n}
+\mathbf{1}[\hat c_i=c_i^{\mathrm{human}}].
+$$
+
+For MANNERS-DB, human ratings of **3 or above** are treated as socially acceptable; the majority of these binarized ratings determines the reference class. Trust-Transfer uses an analogous threshold of **4 or above**, with a single participant rating per instance. SocialIQA uses its provided answer label directly. **Higher CwM is better**, with 1 indicating agreement on every instance.
+
+**3. Distribution measures.** For a given instance, let $$q(z)$$ be the model's probability of human response $$z$$ and $$p(z)$$ the empirical fraction of annotators giving that response. The paper evaluates these measures only on **MANNERS-DB**, which has 15 ratings per instance; the other two datasets provide only one label per instance. <d-cite key="zhang2023large"></d-cite>
+
+**Entropy relative similarity** compares the uncertainty of the two distributions. The paper defines:
+
+$$
+S(q,p)
+=\frac{\sum_z q(z)\log q(z)}{\sum_z p(z)\log p(z)}
+$$
+
+- **$$S(q,p) = 1$$** indicates same entropy. 
+- **$$S(q,p) < 1$$** means the model has less uncertainty than the human response distribution
+- **$$S(q,p) > 1$$** means it has more uncertainty.
+
+**2-Wasserstein distance** compares the distributions while accounting for distances between numerical rating values. For ratings $$z_j$$ and $$z_k$$, its standard discrete form is:
+
+$$
+W_2(q,p)
+=\left[
+\min_{\Gamma\in\Pi(q,p)}
+\sum_{j,k}\Gamma_{jk}(z_j-z_k)^2
+\right]^{1/2}.
+$$
+
+Here, $$\Gamma_{jk}$$ is probability mass transported from rating $$z_j$$ to rating $$z_k$$. The set $$\Pi(q,p)$$ contains nonnegative transport plans satisfying $$\sum_k\Gamma_{jk}=q(z_j)$$ and $$\sum_j\Gamma_{jk}=p(z_k)$$. Moving probability farther across the rating scale costs more. **Lower is better**, and a distance of 0 means the distributions match.
+
+### Experiment Result
+
+The paper's Table I below reports error scores, CwM, and distribution measures across the three datasets.
+
+{% include figure.liquid
+   path="assets/img/2026-10-21-human-models/llm-human-model-table-1-results.png"
+   class="img-fluid rounded z-depth-1"
+   alt="Table I compares DAVINCI, T5, and dataset-specific baselines on error scores, consistency with the human mode, entropy relative similarity, and 2-Wasserstein distance, including context-specific and overall results."
+   caption="Error scores, CwM, and distribution measures."
+   zoomable=true
+%}
+
+The result shows that **pretrained LLMs can capture aspects of human judgment without task-specific fine-tuning**. DAVINCI achieves aggregate prediction errors comparable to specialized baselines, and the CwM results indicate that LLM predictions can approach or exceed average human agreement with benchmark labels on MANNERS-DB and SocialIQA. However, T5's weaker performance on Trust-Transfer under the original prompts shows that predictive effectiveness varies across models and tasks.
+
+Agreement with human labels does not necessarily imply a faithful representation of human response variability. On MANNERS-DB, DAVINCI produces lower-entropy distributions than the human ratings, whereas T5 produces higher-entropy distributions. Although T5 is closer to the empirical distributions under the Wasserstein metric, the specialized Bayesian baseline provides the closest overall match.
+
 ## Presentation Q&A:
 
 ### LESS is More: Rethinking Probabilistic Models of Human Behavior
