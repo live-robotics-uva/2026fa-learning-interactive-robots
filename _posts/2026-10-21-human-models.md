@@ -115,7 +115,7 @@ To further explore the ability of LLMs, they integrate LLM-based human models in
 Let $$s_t$$ denote the environment state at time $$t$$, where the environment contains $$N$$ agents (humans or robots), denoted as $$a^{(i)} \in \mathcal{A}, \quad i=1,\ldots,N$$. The interaction history is defined as
 
 $$
-h_t = \left\{ \left(s_k, \{u_k^{(i)}\}_i \right) \right\}_{k=1}^{t-1} \in \mathcal{H}
+h_t = \left\lbrace \left(s_k, \lbrace u_k^{(i)}\rbrace_i \right) \right\rbrace_{k=1}^{t-1} \in \mathcal{H}
 $$
 
 where $$u_k^{(i)}$$ represents the action of agent $$i$$ at time $$k$$.
@@ -166,9 +166,9 @@ $$
 
 $$
 \begin{aligned}
-\operatorname{RMSE}
+\mathrm{RMSE}
 &=\sqrt{\frac{1}{n}\sum_{i=1}^{n}(\hat y_i-y_i)^2},\\
-\operatorname{MAE}
+\mathrm{MAE}
 &=\frac{1}{n}\sum_{i=1}^{n}|\hat y_i-y_i|.
 \end{aligned}
 $$
@@ -176,7 +176,7 @@ $$
 The paper uses **RMSE for MANNERS-DB** and **MAE for Trust-Transfer**. For **SocialIQA**, which has discrete answer choices, the error score is instead the fraction of incorrect predictions:
 
 $$
-\operatorname{ErrorRate}
+\mathrm{ErrorRate}
 =\frac{1}{n}\sum_{i=1}^{n}\mathbf{1}[\hat c_i\neq c_i],
 $$
 
@@ -185,7 +185,7 @@ where $$\hat c_i$$ is the predicted answer, $$c_i$$ is the correct answer, and $
 **2. Consistency with Mode (CwM).** This metric measures agreement with the majority human label. Writing $$c_i^{\mathrm{human}}$$ for the human reference class and $$\hat c_i$$ for the model's corresponding class prediction gives:
 
 $$
-\operatorname{CwM}
+\mathrm{CwM}
 =\frac{1}{n}\sum_{i=1}^{n}
 \mathbf{1}[\hat c_i=c_i^{\mathrm{human}}].
 $$
