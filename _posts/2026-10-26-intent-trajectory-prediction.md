@@ -153,7 +153,7 @@ $$
 VOR(s,C) = V(s,\pi_C) + Cost(C)
 $$
 
-Here, $s$ is the environment state, $\pi_C$ is the policy based on the selected construal, and $Cost(C)=-|C|$ is a negative complexity penalty for the number of represented objects, as defined in the paper. Thus, adding this term penalizes larger construals rather than rewarding cognitive effort. The agent prefers a construal that supports effective decisions without requiring too much attention.
+Here, $s$ is the environment state, $\pi_C$ is the policy based on the selected construal, and $Cost(C)=-\lvert C \rvert$ is a negative complexity penalty for the number of represented objects, as defined in the paper. Thus, adding this term penalizes larger construals rather than rewarding cognitive effort. The agent prefers a construal that supports effective decisions without requiring too much attention.
 
 The authors extend this framework by adding a parameterized heuristic bias function, $H_\lambda(s,C)$. These biases represent an agent's tendency to attend to or ignore certain objects based on factors such as prior experience or visual salience. The probability of choosing a construal is modeled as
 
