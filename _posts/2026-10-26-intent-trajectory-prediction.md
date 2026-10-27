@@ -5,14 +5,22 @@ description: "Forecasting human motion and navigation trajectories in shared phy
 date: 2026-10-26
 future: true
 htmlwidgets: true
-ready: false
+ready: true
 
 # Reporter team authors
 authors:
   - name: "Vu-Anh Le"
+    affiliations:
+      - name: "University of Virginia"
   - name: "Jameson Sandler"
+    affiliations:
+      - name: "University of Virginia"
   - name: "Anqi Li"
+    affiliations:
+      - name: "University of Virginia"
   - name: "Sudeesh Murugesan"
+    affiliations:
+      - name: "University of Virginia"
 
 bibliography: 2026-10-26-intent-trajectory-prediction.bib
 
@@ -43,7 +51,7 @@ Although the two papers use different methods, both address important challenges
 
 ### Motivation and Problem
 
-Predicting pedestrian movement in crowded environments is challenging because people do not move independently. Their future paths depend on both their previous movements and the behavior of others around them. For example, when two pedestrian approach each other, they may change direction, slow down, or choose different paths to avoid a collision. These different behaviors can all be reasonable, which means that predicting only one future trajectory may not be sufficient.
+Predicting pedestrian movement in crowded environments is challenging because people do not move independently. Their future paths depend on both their previous movements and the behavior of others around them. For example, when two pedestrians approach each other, they may change direction, slow down, or choose different paths to avoid a collision. These different behaviors can all be reasonable, which means that predicting only one future trajectory may not be sufficient.
 
 Previous methods have used hand-crafted features or recurrent neural networks to model pedestrian movements. However, many of these approaches mainly consider interactions within a local neighborhood. Another limitation is that minimizing the L2 prediction error may encourage the model to learn an average trajectory rather than multiple possible future paths.
 
@@ -70,19 +78,19 @@ The proposed pooling mechanism considers the relative positions and hidden state
 
 The Discriminator is another LSTM-based network. It receives a complete trajectory consisting of the observed history and either the real future path or a generated prediction. It then classifies whether the trajectory is real or generated. Through adversarial training, the generator learns to produce trajectories that are more similar to observed pedestrian movements.
 
-To improve prediction diversity, the authors introduce a variety loss. For each observed history, the generator produce $K$ possible future trajectories using different random noise samples. The loss is calculated using the generated trajectory closest to the ground truth:
+To improve prediction diversity, the authors introduce a variety loss. For each observed history, the generator produces $K$ possible future trajectories using different random noise samples. The loss is calculated using the generated trajectory closest to the ground truth:
 
 $$
 \mathcal{L}_{\mathrm{variety}}=
 \min_{k \in \{1, \ldots,K\}}
-\left\|Y_i-\hat{Y}_i{(k)}\right\|_2.
+\left\|Y_i-\hat{Y}_i^{(k)}\right\|_2.
 $$
 
 Here, $Y_i$ is the ground-truth future trajectory, $\hat{Y}_i^{(k)}$ is the $k$-th generated trajectory, and $K$ is the number of sampled predictions. This loss encourages the model to generate different possible trajectories rather than making every prediction close to one average path. The variety loss is combined with adversarial training to improve both diversity and prediction accuracy.
 
 ### Experiments and Results
 
-The authors evaluated Social GAN using the ETH and UCY pedestrian trajectory datasets, including five subsets: ETH, HOTEL, UNIV, ZARA1, and ZARA2. These datasets contain real pedestrian movements in different environments. The model observes 8 times steps (3.2 seconds) and predicts the next 8 or 12 time steps (3.2 or 4.8 seconds). The experiments use a leave-one-out setting, where four subsets are used for training and the remaining subset is used for testing.
+The authors evaluated Social GAN using the ETH and UCY pedestrian trajectory datasets, including five subsets: ETH, HOTEL, UNIV, ZARA1, and ZARA2. These datasets contain real pedestrian movements in different environments. The model observes 8 time steps (3.2 seconds) and predicts the next 8 or 12 time steps (3.2 or 4.8 seconds). The experiments use a leave-one-out setting, where four subsets are used for training and the remaining subset is used for testing.
 
 The prediction accuracy is evaluated using two metrics:
 
@@ -99,7 +107,7 @@ The authors compared Social GAN with several baseline methods, including Linear 
    caption="Table 1: Quantitative comparison of trajectory prediction methods using ADE and FDE. Reproduced from Gupta et al. (2018), Table 1."
 %}
 
-The results show that SGAN-20V-20 achieves the lowest average ADE and FDE among the selected methods. The full model with pooling, SGAN-20VP-20, has slightly higher errors, but still performs better than the LSTM and Social LSTM baselines on average. The Scocial GAN results are based on selecting the best prediction from 20 generated samples during evaluation, while the baseline models produce a single prediction.
+The results show that SGAN-20V-20 achieves the lowest average ADE and FDE among the selected methods. The full model with pooling, SGAN-20VP-20, has slightly higher errors, but still performs better than the LSTM and Social LSTM baselines on average. The Social GAN results are based on selecting the best prediction from 20 generated samples during evaluation, while the baseline models produce a single prediction.
 
 The authors also conducted ablation experiments to study the effects of variety loss and social pooling. The results show that variety loss improves prediction accuracy by encouraging the model to generate more diverse possible futures. Simply generating more samples from a model trained without variety loss does not provide the same improvement.
 
@@ -111,17 +119,17 @@ Although pooling does not produce the lowest displacement errors, it helps the m
    caption="Figure 2: Comparison of Social GAN predictions without pooling (top) and with pooling (bottom) in collision avoidance scenarios. Reproduced from Gupta et al. (2018), Figure 5."
 %}
 
-The qualitative results show that the pooling-based model can better represent behaviors such as changing direction to avoid other pedestrian, moving around a group, and slowing down to let another person pass. The authors also report that the pooling-based model is approximately 16 times faster than Social LSTM in their benchmark, mainly because it avoids performing the same expensive pooling operations at every time step.
+The qualitative results show that the pooling-based model can better represent behaviors such as changing direction to avoid other pedestrians, moving around a group, and slowing down to let another person pass. The authors also report that the pooling-based model is approximately 16 times faster than Social LSTM in their benchmark, mainly because it avoids performing the same expensive pooling operations at every time step.
 
 ### Limitations and Takeaways
 
-Social GAN shows that pedestrian trajectory prediction can benefit from modeling both social interactions and multiple possible future movements. Its main contributions include the GAN-based prediction framework, the pooling mechanism for capturing interactions, and the variety loss generating diverse trajectories.
+Social GAN shows that pedestrian trajectory prediction can benefit from modeling both social interactions and multiple possible future movements. Its main contributions include the GAN-based prediction framework, the pooling mechanism for capturing interactions, and the variety loss for generating diverse trajectories.
 
-However, the method mainly focuses on pedestrian movement and does not explicit model envioronmental obstacles, scene samentics, or long-term human goals. Its prediction performance also depends on the observed trajectories of surrounding pedestrians, which may be incomplete or noisy in real-world applications.
+However, the method mainly focuses on pedestrian movement and does not explicitly model environmental obstacles, scene semantics, or long-term human goals. Its prediction performance also depends on the observed trajectories of surrounding pedestrians, which may be incomplete or noisy in real-world applications.
 
-Another limitation is the best-of-multiple-samples evaluation. Although generating several possible trajectories improves ADE and FDE, a robot cannot know in advance which prediction will match the autual future movement. Therefore, additional planing methods would be needed to use these predictions safely in real robot navigation.
+Another limitation is the best-of-multiple-samples evaluation. Although generating several possible trajectories improves ADE and FDE, a robot cannot know in advance which prediction will match the actual future movement. Therefore, additional planning methods would be needed to use these predictions safely in real robot navigation.
 
-Overall, Social GAN provides an approach for predicting multiple plausible pedestrian trajectories instead of relying on a single future path. It also shows why modeling social interactions is important for robots navigating in environments share  with humans.
+Overall, Social GAN provides an approach for predicting multiple plausible pedestrian trajectories instead of relying on a single future path. It also shows why modeling social interactions is important for robots navigating in environments shared with humans.
 
 ## Estimating Cognitive Biases with Attention-Aware Inverse Planning
 
@@ -145,7 +153,7 @@ $$
 VOR(s,C) = V(s,\pi_C) + Cost(C)
 $$
 
-Here, $s$ is the environment state, $\pi_C$ is the policy based on the selected construal, and $Cost(C)$ represents the cognitive cost of maintaining that representation. The agent prefers a construal that supports effective decisions without requiring too much attention.
+Here, $s$ is the environment state, $\pi_C$ is the policy based on the selected construal, and $Cost(C)=-|C|$ is a negative complexity penalty for the number of represented objects, as defined in the paper. Thus, adding this term penalizes larger construals rather than rewarding cognitive effort. The agent prefers a construal that supports effective decisions without requiring too much attention.
 
 The authors extend this framework by adding a parameterized heuristic bias function, $H_\lambda(s,C)$. These biases represent an agent's tendency to attend to or ignore certain objects based on factors such as prior experience or visual salience. The probability of choosing a construal is modeled as
 
@@ -183,9 +191,9 @@ For more complex environments, calculating a separate optimal policy for every c
 
 ### Experiments and Results
 
-The authors evaluated AAIP in two enviroments: DrivingWorld and GPUDrive. Both experiments use simulated agents with known attentional biases, allowing the researchers to compare the estimated parameters with the true values.
+The authors evaluated AAIP in two environments: DrivingWorld and GPUDrive. Both experiments use simulated agents with known attentional biases, allowing the researchers to compare the estimated parameters with the true values.
 
-The first experiments uses **DrivingWorld**, a simplified driving environment containing parked cars, ice patches, traffic cones, and a goal location. The agent must move toward the goal while avoiding obstacles. Three attentional bias parameters are considered, corresponding to ice, cones, and parked cars.
+The first experiment uses **DrivingWorld**, a simplified driving environment containing parked cars, ice patches, traffic cones, and a goal location. The agent must move toward the goal while avoiding obstacles. Three attentional bias parameters are considered, corresponding to ice, cones, and parked cars.
 
 The authors generated behavioral data from 1,000 simulated agents with different bias weights. Each agent produced 125 trajectories across 25 scenarios. The model then estimated the three bias parameters from the observed trajectories.
 
@@ -201,9 +209,9 @@ The results show that AAIP can recover some attentional biases from behavior. Th
 
 The authors also compare AAIP with traditional IRL. In an experiment with an agent biased to ignore ice, AAIP achieves a negative log-likelihood (NLL) of 265, while the tested IRL models achieve values between 513 and 537. Lower NLL indicates a better fit to the observed behavior. This comparison shows that changing reward parameters may not fully explain behavior caused by limited attention.
 
-The second experiments uses **GPUDrive**, a driving simulator with scenarios selected from the Waymo Open Dataset. The experiments include situations such as lane changes, merging, and yielding to other vehicles. The authors use a pre-trained PPO policy to simulate driving behavior under different attentional representations.
+The second experiment uses **GPUDrive**, a driving simulator with scenarios selected from the Waymo Open Dataset. The experiments include situations such as lane changes, merging, and yielding to other vehicles. The authors use a pre-trained PPO policy to simulate driving behavior under different attentional representations.
 
-In this environment, the authors generated data from 215 simulated agents, with 80 trajectories per agent across 10 driving scenarios. The attention model uses three heuristic features based on relative vehicles position, heading, and motion.
+In this environment, the authors generated data from 215 simulated agents, with 80 trajectories per agent across 10 driving scenarios. The attention model uses three heuristic features based on relative vehicle position, heading, and motion.
 
 Figure 5 shows the results of estimating the attentional bias weights in GPUDrive.
 
@@ -213,7 +221,7 @@ Figure 5 shows the results of estimating the attentional bias weights in GPUDriv
    caption="Figure 5: Recovery of attentional bias weights in GPUDrive using Waymo driving scenarios. Reproduced from Banerjee et al. (2025), Figure 5."
 %}
 
-The results shows positive relationships between the true and estimated weights for all three heuristics, with $R^2$ values of 0.77, 0.76, and 0.83. These results suggests that AAIP can recover attentional bias parameters in more complex driving environments, not only simplified tabular tasks.
+The results show positive relationships between the true and estimated weights for all three heuristics, with $R^2$ values of 0.77, 0.76, and 0.83. These results suggest that AAIP can recover attentional bias parameters in more complex driving environments, not only simplified tabular tasks.
 
 ### Limitations and Takeaways
 
@@ -233,7 +241,7 @@ During the class discussion, one question was how to combine individual pedestri
 
 Another discussion focused on multimodal prediction and generalization. The professor mentioned that generating multiple trajectories does not guarantee that rare behaviors will be captured, since models still depend on the distribution of their training data. This helps explain why the variety loss in Social GAN is useful. The class also raised concerns about whether models trained on limited pedestrian datasets would generalize to different environments, crowded scenes, or people with different movement patterns.
 
-For AAIP, the discussion focused on how attention may change over time and how inferred biases could improve safety. The current method assumes a fixed construal during an episode, but people may shift their attention as situation change. Examples discussed in class included driver warning systems and assistive robots that adapt to a person's behavior. A related challenge is distinguishing between someone ignoring a hazard and knowingly accepting its risk.
+For AAIP, the discussion focused on how attention may change over time and how inferred biases could improve safety. The current method assumes a fixed construal during an episode, but people may shift their attention as situations change. Examples discussed in class included driver warning systems and assistive robots that adapt to a person's behavior. A related challenge is distinguishing between someone ignoring a hazard and knowingly accepting its risk.
 
 Overall, the discussion highlighted that predicting common behaviors is not enough for safe human-robot interaction. Rare or unexpected behaviors may be especially important, even when they are not well represented in training data. Combining trajectory prediction with attention-aware modeling could be an interesting direction for future research.
 
