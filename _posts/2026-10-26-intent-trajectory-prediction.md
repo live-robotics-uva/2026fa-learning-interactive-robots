@@ -32,13 +32,6 @@ toc:
   - name: "References"
 ---
 
-{% include figure.liquid
-   path="assets/img/2026-10-26-intent-trajectory-prediction/dynamic_intent_queries.png"
-   class="img-fluid rounded z-depth-1"
-   alt="Static intention points in green and road-aligned dynamic intention points in blue, with the agent and its trajectory in red."
-   caption='Comparison of static (green) and dynamic (blue) intention points, with the agent and its trajectory shown in red. Reproduced from Demmler et al. (2025), Figure 1, in <em>Dynamic Intent Queries for Motion Transformer-based Trajectory Prediction</em> <d-cite key="demmler2025dynamic"></d-cite>.'
-%}
-
 ## Introduction
 
 Predicting human intent and future trajectories is an important problem in human-robot interaction. When robots work in environments with people, they need to consider not only their own actions but also how people around them may behave. For example, a delivery robot moving through a crowded area needs to predict pedestrian movements to avoid collisions and navigate safely. However, human behavior is difficult to predict because people can have different goals, interact with each other, and make decisions based on incomplete information.
