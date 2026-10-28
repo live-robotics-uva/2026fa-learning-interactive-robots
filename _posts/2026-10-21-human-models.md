@@ -5,7 +5,7 @@ description: "Computational human models: Boltzmann rationality, bounded rationa
 date: 2026-10-21
 future: true
 htmlwidgets: true
-ready: false
+ready: true
 
 # Reporter team authors
 authors:
@@ -72,9 +72,9 @@ Traditional Boltzmann models can assign excessive probability to groups containi
 
 Imagine a robot navigating a hallway with several people. The robot knows its destination and can detect obstacles, but it doesn't necessarily know where people intend to go. The main challenge is that human behavior is uncertain. Humans can change direction, pursue different goals, and react to the robot itself. A human model helps a robot:
 
--   Infer intent: Understand what a person is trying to accomplish.
--   Predict behavior: Anticipate the person's future actions.
--   Plan interactions: Choose safe and effective actions based on those predictions.
+-   **Infer intent**: Understand what a person is trying to accomplish.
+-   **Predict behavior**: Anticipate the person's future actions.
+-   **Plan interactions**: Choose safe and effective actions based on those predictions.
 
 ### How do we model human behavior?
 
@@ -447,7 +447,7 @@ The two planning case studies take one further step. They use the predicted huma
 
 The method still has clear limits. Language models are weak at some spatial, physical, and numerical details. A complete robot system therefore needs both an LLM-based human model and other models for perception, geometry, motion, and safety.
 
-## Presentation Q&A:
+## Discussion Questions:
 
 ### LESS is More: Rethinking Probabilistic Models of Human Behavior
 
@@ -461,6 +461,8 @@ The method still has clear limits. Language models are weak at some spatial, phy
 -   The authors used very simple tasks to test LLMs as human models. But, in the real world, would LLMs be sufficient to approximate humans?
 -   When interacting with humans, some people will do the exact opposite of what's expected, ex: intervene for a whisk but not a knife, seemingly just to be contrarian. How can an LLM or Robot account for this?
 
-### Report Status
+[//]: # ()
+[//]: # (### Report Status)
 
-This report is currently being prepared and will be updated by the student reporter team following the lecture session and classroom discussion. Please check back soon!
+[//]: # ()
+[//]: # (This report is currently being prepared and will be updated by the student reporter team following the lecture session and classroom discussion. Please check back soon!)
