@@ -233,6 +233,135 @@ The result shows that **pretrained LLMs can capture aspects of human judgment wi
 
 Agreement with human labels does not necessarily imply a faithful representation of human response variability. On MANNERS-DB, DAVINCI produces lower-entropy distributions than the human ratings, whereas T5 produces higher-entropy distributions. Although T5 is closer to the empirical distributions under the Wasserstein metric, the specialized Bayesian baseline provides the closest overall match.
 
+### LLMs on Tasks
+
+#### From a Text Description to a Prediction
+
+The previous section defines the input prompt as
+
+$
+x_t=f(s_t,h_t,mathcal{A}),
+$
+
+where $s_t$ is the current environment state, $h_t$ is the interaction history, and $mathcal{A}$ is the set of agents. The LLM reads $x_t$ and predicts a human action, judgment, or mental state $z_t^H$.
+
+For a task with a discrete set of possible answers $mathcal{Z}$, the predicted answer can be written as
+
+$
+hat{z}_t^H=argmax_{zinmathcal{Z}}p_l(zmid x_t).
+$
+
+The robot first turns the situation into text. The LLM then gives a prediction about the human. The prediction can later be used by a robot planner.
+
+#### Three Prediction Tasks
+
+The paper evaluates this idea on three tasks. The tasks are different, so they test different parts of human modeling.
+
+| Dataset | Human quantity to predict | Main challenge |
+| --- | --- | --- |
+| MANNERS-DB | Social appropriateness of a robot action, rated from 1 to 5 | Physical and spatial context |
+| Trust-Transfer | Human trust after watching robot demonstrations, rated from 1 to 7 | Effect of interaction history |
+| SocialIQA | The most reasonable social response among three choices | Social commonsense reasoning |
+
+#### MANNERS-DB: Social Appropriateness
+
+In MANNERS-DB, the model receives a text description of a robot action in a social setting. It predicts whether people will find the action appropriate.
+
+This task is difficult because the answer depends on details in the scene. The distance between the robot and a person, the direction of motion, and the position of objects can all change the judgment. These details are easier to see in an image or a physical scene than in a short text prompt.
+
+#### Trust-Transfer: Change in Human Trust
+
+The Trust-Transfer task asks whether a person's trust changes after watching robot demonstrations. The input includes information about what the robot did before. The output is a trust rating.
+
+This task is different from MANNERS-DB. Here, the main information is not only the current scene. The earlier interaction history also matters. A person may trust a robot more after several successful actions, or less after seeing a failure.
+
+#### SocialIQA: Social Commonsense
+
+SocialIQA contains short social situations with three possible answers. The model chooses the answer that best matches normal human behavior.
+
+This task has less physical information than the first two tasks. It mainly tests whether the language model has learned common social knowledge from text.
+
+#### Reading the Results
+
+The results are given in Table I in the previous section. DAVINCI is close to specialized baselines on several tasks. T5 performs differently across the datasets.
+
+The results also show that a correct final answer is not the whole story. A human model should also give a reasonable uncertainty distribution. On MANNERS-DB, the predicted distributions from the LLMs do not always match the spread of human ratings. This is why the paper reports both prediction error and distribution measures.
+
+### LLMs Sensitivity to Prompt Structure
+
+#### What Is Inside a Prompt?
+
+The LLM does not directly see the robot scene. It only receives a text prompt. A prompt may include the current state, previous actions, task instructions, and a question about the human response.
+
+| Prompt part | Information it gives |
+| --- | --- |
+| Task instruction | What the model needs to predict |
+| Current state | Who is present, what objects are present, and what is happening now |
+| Interaction history | What the robot and human did earlier |
+| Question | The action, judgment, or trust value to predict |
+
+#### Why Prompt Changes Matter
+
+The paper changes the wording and structure of prompts and compares the resulting predictions. The answer can change when the order of information changes or when important context is removed.
+
+For example, a prompt that only says “the robot moves an object” leaves out many useful details. It does not say where the object is, who is nearby, or what happened before. A longer prompt can include these details, but a longer prompt is not always better. The information still needs to be clear and relevant.
+
+#### A Practical Limitation
+
+This sensitivity creates a problem for real robot systems. The same physical event should not lead to very different predictions only because the text is written in a different way.
+
+A practical system therefore needs a fixed prompt format. The format should state the task, the relevant objects, the robot action, the human action, and the needed history. It should also avoid adding unrelated details.
+
+### Case Studies: Planning
+
+#### Using a Human Prediction in Planning
+
+The LLM prediction is not the final robot action. It is one input to the planner. The planner uses the predicted human response when comparing possible robot actions.
+
+For example, the robot may need to decide whether to continue, slow down, explain its action, or choose a different object. The better choice depends partly on what the human may do next.
+
+#### Trust-Based Table Clearing
+
+The first case study is a simulated table-clearing task. The robot needs to clear objects from a table while considering human trust. The paper replaces a custom human model from earlier work with an LLM-based human model.
+
+The goal is not only to remove objects quickly. The robot also needs to avoid actions that may lead to an unsuitable level of trust. A person who trusts the robot too much may fail to intervene when intervention is needed. A person with very low trust may interrupt useful robot actions.
+
+This case study shows that an LLM-based model can be connected to a planning system. It also shows that the model is used at a high level. It does not replace motion planning or physical control.
+
+#### Utensil-Passing Experiment
+
+The second case study is a robot utensil-passing task with human participants. The robot passes utensils to a person. The person can respond differently depending on the utensil and the robot action.
+
+The planner uses the predicted human response to select an action sequence. The experiment includes 65 participants. The paper compares planning with the LLM-based human model against a basic myopic plan, which only considers the immediate task outcome.
+
+{% include figure.liquid
+   path="assets/img/2026-10-21-human-models/llm-human-model-figure-5-utensil-setup.png"
+   class="img-fluid rounded z-depth-1"
+   alt="A robot and a human take part in the utensil-passing experiment."
+   caption="Utensil-passing experiment setup used to study planning with an LLM-based human model."
+   zoomable=true
+%}
+
+The LLM-based planner can make better high-level choices in this task. However, the system still needs other components. The LLM does not provide object coordinates, collision-free trajectories, or a safety guarantee.
+
+{% include figure.liquid
+   path="assets/img/2026-10-21-human-models/llm-human-model-figure-6-scissors-handover.png"
+   class="img-fluid rounded z-depth-1"
+   alt="A robot hands over scissors during the utensil-passing task."
+   caption="Example handover case from the utensil-passing task. The predicted human response affects the robot's planning choice."
+   zoomable=true
+%}
+
+### Conclusion
+
+The paper starts by turning an interaction state and history into a text prompt. It then uses an LLM to predict a human judgment, action, or trust state.
+
+The three dataset experiments test social appropriateness, trust, and social commonsense. These tests show that pretrained LLMs can make useful zero-shot predictions in some settings. At the same time, the prompt experiments show that the predictions are sensitive to how the situation is described.
+
+The two planning case studies take one further step. They use the predicted human response when choosing robot actions. This is useful for high-level interaction planning.
+
+The method still has clear limits. Language models are weak at some spatial, physical, and numerical details. A complete robot system therefore needs both an LLM-based human model and other models for perception, geometry, motion, and safety.
+
 ## Presentation Q&A:
 
 ### LESS is More: Rethinking Probabilistic Models of Human Behavior
