@@ -165,11 +165,11 @@ LESS measures each trajectory by the inverse of its density, which prevents feat
 **Metric.** KLAggregate is the metric used to measure robustness. Specifically, it measures inference consistency across different trajectory sample sets. 
 
 **Results.**
-- **Single demonstration:** LESS is more consistent for the above settings, and the two models converge less than $300$ trials.
+- **Single demonstration:** LESS is more consistent ($S\geq 300$), and the two models converge with more $300$ set size.
 - **Batch inference:** Boltzmann is more consistent when all $12$ demonstrations are leveraged to represent an ``average'' user.
 
 ### Limitation
-The presentator pointed out three limitations of LESS:
+The presentor pointed out three limitations of LESS:
 - Similarity depends on pre-specified features. LESS measures similarity between the feature vectors of trajectories, and these features are pre-specified, so feature misspecification is a risk.
 - Batch inference is less robust. In the 7-DOF manipulator demonstration, LESS is less consistent than Boltzmann for batch inference. It is also unclear whether it is also less accurate.
 - Simplistic datasets of human choices; more realistic studies are complicated by the lack of access to ground truth.
