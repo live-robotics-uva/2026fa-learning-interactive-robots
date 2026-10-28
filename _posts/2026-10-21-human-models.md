@@ -89,6 +89,89 @@ The lecture introduces several approaches:
 
 ## LESS is More: Rethinking Probabilistic Models of Human Behavior
 
+### Motivation
+
+Human-robot collaboration requires a model of human behavior for both inference and prediction. For inference, the robot uses the model to recover human goals and preferences from observed behavior. For prediction, the robot uses the model to anticipate future human behavior and coordinate its own actions.
+
+A standard choice is the **Boltzmann noisily-rational decision model**, which assigns higher likelihood to trajectories with higher reward. It was originally developed for decisions among discrete and distinct options. However, human trajectories lie in a continuous space with a continuum of alternatives that vary in their similarity to one another. Because the Boltzmann model does not explicitly account for these similarities, adding nearly identical, equally rewarding trajectories can increase their group's total probability even though they represent essentially the same behavior. **LESS (Limiting Errors due to Similar Selections)** addresses this issue by accounting for both reward and similarity among available trajectories. <d-cite key="bobu2020less"></d-cite>
+
+### Background
+
+Real-world trajectory spaces are full of near-duplicates. Consider two equally rewarding trajectories to a goal, one going left and one going right. Boltzmann assigns each probability $$1/2$$. Adding two trajectories similar to the right-hand trajectory, with all four rewards equal, changes each probability to $$1/4$$. The total probability of going right becomes $$3/4$$, even though the added options largely repeat an existing route. However, the idealized LESS correction retains a probability of $$1/2$$ on the left and reduces the probability of each similar right-hand trajectory to $$1/6$$.
+
+{% include figure.liquid
+   path="assets/img/2026-10-21-human-models/less-figure-1-full.png"
+   class="img-fluid rounded z-depth-1"
+   alt="Top: two equally rewarding routes receive equal probability; adding similar right-hand routes changes the Boltzmann probabilities, while the idealized LESS correction preserves the balance between groups. Bottom: a person providing a demonstration with a 7-DOF robotic arm, with trajectories shown in an inset."
+   caption="Bobu et al. (2020), Figure 1. Boltzmann reduces the left probability from 1/2 to 1/4; the idealized LESS correction retains a probability of \(1/2\) on the left and reduces the probability of each similar right-hand trajectory to \(1/6\). The bottom panel shows a user demonstration with a 7-DOF robotic arm."
+   zoomable=true
+   avoid_scaling=true
+%}
+
+The choice rule comes from Luce's choice axiom, which assigns each option a probability proportional to its desirability. For a finite option set $$O$$, let $$v(o)>0$$ denote the desirability of option $$o\in O$$. The selection probability is
+
+$$
+P(o)=\frac{v(o)}{\sum_{\bar o\in O}v(\bar o)}.
+$$
+
+Letting $$v(o)=\exp(R(o))$$, we obtain the Luce-Shepard choice rule. When the options are trajectories $$\xi\in\Xi$$ (where $$\Xi$$ is the feasible trajectory space), this becomes the Boltzmann model of noisily rational behavior. With feature vector $$\phi(\xi)$$ and reward $$R(\phi(\xi))$$, its continuous density is
+
+$$
+p_{\mathrm B}(\xi)
+=\frac{\exp(R(\phi(\xi)))}
+{\int_{\Xi}\exp(R(\phi(\bar\xi)))\,d\bar\xi}.
+$$
+
+For a finite choice set, the normalizing integral becomes a sum. Each alternative trajectory contributes separately according to its reward, so adding duplicates changes selection probabilities. Extensions of Luce's model address this problem by grouping identical or similar options. <d-cite key="bobu2020less"></d-cite>
+
+One such method is the Attribute Rule proposed by Gul et al. It treats options as bundles of attributes. Choice proceeds in two stages: first choose an attribute $$x$$ using Luce's rule, then choose an option $$o$$ with that attribute, weighted by its intensity $$s(x,o)$$.
+
+LESS takes advantage of the Attribute Rule's handling of duplicates while extending it to trajectories with continuous-valued features. <d-cite key="bobu2020less"></d-cite>
+
+### Less Model
+
+LESS modifies the Attribute Rule by treating the feature vectors of trajectories as attributes. Trajectories with the same features are treated as a single option, and the group's probability is distributed equally among them. If every trajectory has a unique feature vector, this exact-matching construction recovers the Boltzmann model.
+
+However, real-world trajectories can be very similar without being exactly the same. Therefore, LESS introduces a nonnegative similarity function $$s(\phi(\xi),\bar\xi)$$. This function is symmetric between trajectories and reaches its maximum when a trajectory is compared with itself. As a result, the model adjusts reward-based choice based on aggregate similarity:
+
+$$
+\begin{aligned}
+D(\xi)&=\int_{\Xi}s(\phi(\xi),\bar\xi)\,d\bar\xi,\\
+p_{\mathrm L}(\xi)&=\frac{1}{Z_{\mathrm L}}
+\frac{\exp(R(\phi(\xi)))}{D(\xi)}.
+\end{aligned}
+$$
+
+In the equation, $$D(\xi)$$ measures aggregate similarity to all available trajectories, and $$Z_{\mathrm L}$$ normalizes the density. High reward still increases a trajectory's weight, but similar alternatives reduce its individual weight. In the idealized left-right example, the right-hand trajectories share their group's probability. For general trajectories, the adjustment depends on their feature similarities. <d-cite key="bobu2020less"></d-cite>
+
+The paper uses **Kernel Density Estimation (KDE)** with a radial basis function (RBF) kernel to measure feature-space crowding:
+
+$$
+s(x,\bar\xi)
+=\frac{1}{\sigma\sqrt{2\pi}}
+\exp\left(-\frac{\|x-\phi(\bar\xi)\|^2}{2\sigma^2}\right),
+\qquad \sigma>0.
+$$
+
+In this equation, $$x$$ is a feature vector, and $$\sigma$$ is the bandwidth, which controls how broadly similarity extends. Larger bandwidths make trajectories appear more similar. The paper fits the bandwidth through a KDE likelihood objective on sampled trajectories and approximates aggregate similarity by summing kernel values over a finite trajectory set.
+
+Given a belief $$b(\theta)$$ over the reward parameters $$\theta\in\Theta$$, LESS predicts human trajectories by marginalizing over those parameters:
+
+$$
+p_{\mathrm{pred}}(\xi)
+=\int_{\Theta}b(\theta)p_{\mathrm L}(\xi\mid\theta)\,d\theta.
+$$
+
+After observing a human trajectory $$\xi$$, Bayesian inference updates the belief over $$\theta$$:
+
+$$
+b'(\theta)
+=\frac{b(\theta)p_{\mathrm L}(\xi\mid\theta)}
+{\int_{\Theta}b(\bar\theta)p_{\mathrm L}(\xi\mid\bar\theta)\,d\bar\theta}.
+$$
+
+For tractability, the paper uses a discretized set of reward parameters and finite trajectory samples. <d-cite key="bobu2020less"></d-cite>
+
 ### Less as Human Decision Model
 
 Before exploring whether LESS helps a robot, the authors explore whether LESS is a better description of how people actually make decisions than the Boltzmann model? They therefore designed and conducted the following experiments.
@@ -466,3 +549,7 @@ The method still has clear limits. Language models are weak at some spatial, phy
 
 [//]: # ()
 [//]: # (This report is currently being prepared and will be updated by the student reporter team following the lecture session and classroom discussion. Please check back soon!)
+
+## Appendix:
+
+Used GPT-6.1 Sol to transfer text into a Markdown file.
