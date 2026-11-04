@@ -42,7 +42,7 @@ toc:
     
   - name: "Large Language Models as Zero-Shot Human Models for Human-Robot Interaction"
     subsections:
-        - name: "Motivation"
+        - name: "Motivation and Overview"
         - name: "Problem Definition"
         - name: "Experiment Setup"
         - name: "Experiment Result"
@@ -53,8 +53,8 @@ toc:
 #            - name: "Table Clearing"
 #            - name: "Utensil Passing"
         - name: "Conclusion"
-  - name: "Question"
-  - name: "Reference"
+  - name: "Discussion Questions"
+  - name: "Appendix"
 ---
 
 ## Introduction
@@ -177,7 +177,7 @@ For tractability, the paper uses a discretized set of reward parameters and fini
 
 ### Less as Human Decision Model
 
-Before exploring whether LESS helps a robot, the authors explore whether LESS is a better description of how people actually make decisions than the Boltzmann model? They therefore designed and conducted the following experiments.
+Before exploring whether LESS helps a robot, the authors explore whether LESS is a better description of how people actually make decisions than the Boltzmann model. They therefore designed and conducted the following experiments.
 
 #### Design
 
@@ -200,7 +200,7 @@ In the control trial, 47.5% of participants chose the left path. In the experime
 
 Boltzmann's prediction is significantly different from the human choices, while LESS shows no significant difference from them.
 
-**Takeaway:** LESS is a significantly better fit for human decision-making.
+**Takeaway:** LESS is a better fit for human decision-making, although neither model is a perfect predictor.
 
 ### LESS for Inference
 
@@ -236,33 +236,33 @@ The authors conducted two experiments:
 - **Inference model:** the robot infers $\theta$ with either Boltzmann or LESS.
 
 Each condition is tested across $8$ reward settings and $150$ random seeds. The following metrics are used.
-- **TrueMatch**: it tests whether the most possible reward of a robot  is close to the true reward.
+- **TrueMatch**: a binary metric that tests whether the robot's most probable reward parameter exactly matches the true one.
 - **TruePosterior**: it tests the amount of belief the robot places on the correct answer.
 
 The results show that inference performance is significantly higher when the inference model matches the sampling model. Additionally, Boltzmann is sensitive to feature density. (1) In **high-density**, the robot **under-learns**. (2) In **sparse**, the robot **over-learns**.
 
-LESS measures each trajectory by the inverse of its density, which prevents feature density from influencing inference strength. After LESS's modification, the density is nearly flat, so it does not controls how much the robot learns.
+LESS weighs each trajectory by the inverse of its density, which prevents feature density from influencing inference strength. After LESS's modification, the density is nearly flat, so it does not control how much the robot learns.
 
 #### 7-DOF Manipulator Demonstration
-**Real-world challenge.** In a real-world environment, the denominator is intractable, so trajectory sample sets are required. Since Boltzmann is sensitive to feature space density, its inference results may vary hugely across different trajectrory sample sets. This experiment therefore measures robustness across sample sets.
+**Real-world challenge.** In a real-world environment, the denominator is intractable, so trajectory sample sets are required. Since Boltzmann is sensitive to feature space density, its inference results may vary hugely across different trajectory sample sets. This experiment therefore measures robustness across sample sets.
 
-**Settings.** $12$ participants interact with a 7 degree of freedom (DOF) JACO arm on a household manipulation task.
+**Settings.** $12$ participants interact with a 7 degree of freedom (DOF) JACO arm on three household manipulation tasks.
 
 **Metric.** KLAggregate is the metric used to measure robustness. Specifically, it measures inference consistency across different trajectory sample sets. 
 
 **Results.**
-- **Single demonstration:** LESS is more consistent ($S\geq 300$), and the two models converge with more $300$ set size.
-- **Batch inference:** Boltzmann is more consistent when all $12$ demonstrations are leveraged to represent an ``average'' user.
+- **Single demonstration:** LESS is more consistent. In the laptop task, the difference is significant for sample set sizes $S \leq 100$ and disappears for $S \geq 300$.
+- **Batch inference:** Boltzmann is more consistent when all $12$ demonstrations are leveraged to represent an "average" user.
 
 ### Limitation
-The presentor pointed out three limitations of LESS:
+The presenter pointed out three limitations of LESS:
 - Similarity depends on pre-specified features. LESS measures similarity between the feature vectors of trajectories, and these features are pre-specified, so feature misspecification is a risk.
 - Batch inference is less robust. In the 7-DOF manipulator demonstration, LESS is less consistent than Boltzmann for batch inference. It is also unclear whether it is also less accurate.
 - Simplistic datasets of human choices; more realistic studies are complicated by the lack of access to ground truth.
 
 ## Large Language Models as Zero-Shot Human Models for Human-Robot Interaction
 
-### Motivation
+### Motivation and Overview
 Human models enable robots to understand and reason about human behavior, allowing them to plan their actions while considering their potential impact on humans. However, existing methods face two main challenges:
 - **Limited flexibility and scalability** of handcrafted human models due to strong assumptions.
 - **High demand for human interaction data** in non-parametric models.
@@ -313,7 +313,7 @@ $$
 
 **Models:** The prediction experiments compare **DAVINCI** (`text-davinci-003`, 175B) and **T5** (`FLAN-T5-XXL`, 11B). DAVINCI is accessed through an API, while T5 runs locally. 
 
-**Datasets:** This paper uses two HRI-related datasets and a human-human social interaction dataset. Each dataset has a different specialized baseline, trained or developed for that prediction problem. The datails of these datasets are shown below:
+**Datasets:** This paper uses two HRI-related datasets and a human-human social interaction dataset. Each dataset has a different specialized baseline, trained or developed for that prediction problem. The details of these datasets are shown below:
 
 | Dataset | Prediction task | This dataset is for | Baseline model |
 |---|---|---:|---|
@@ -321,7 +321,7 @@ $$
 | <span style="position: relative; display: inline-block;">Trust-Transfer<d-cite key="soh2018transfer"></d-cite></span> | Trust after observing robot demonstrations, rated from 1 to 7 | Evaluating whether LLMs can capture the effect of interaction history on a human's mental state | Gaussian Process and Neural Network (GPNN) |
 | SocialIQA | Social commonsense reasoning with three answer choices | Evaluating LLM's ability to reason about human social interactions | Fine-tuned BERT-large |
 
-**Prompts:** Prompts include task instructions, relevant environment information, interaction history where applicable, and a question about the human response. The LLMs receive textual descriptions rather than directly inspecting the scene images used in MANNERS-DB annotation. The examples of prompts in each dataset is shown below.
+**Prompts:** Prompts include task instructions, relevant environment information, interaction history where applicable, and a question about the human response. The LLMs receive textual descriptions rather than directly inspecting the scene images used in MANNERS-DB annotation. Example prompts for each dataset are shown below.
 
 {% include figure.liquid
    path="assets/img/2026-10-21-human-models/llm-human-model-figure-2-datasets-prompts.png"
@@ -410,29 +410,23 @@ Agreement with human labels does not necessarily imply a faithful representation
 
 The previous section defines the input prompt as
 
-$
-x_t=f(s_t,h_t,mathcal{A}),
-$
+$$
+x_t=f(s_t,h_t,\mathcal{A}),
+$$
 
-where $s_t$ is the current environment state, $h_t$ is the interaction history, and $mathcal{A}$ is the set of agents. The LLM reads $x_t$ and predicts a human action, judgment, or mental state $z_t^H$.
+where $$s_t$$ is the current environment state, $$h_t$$ is the interaction history, and $$\mathcal{A}$$ is the set of agents. The LLM reads $$x_t$$ and predicts a human action, judgment, or mental state $$z_t^H$$.
 
-For a task with a discrete set of possible answers $mathcal{Z}$, the predicted answer can be written as
+For a task with a discrete set of possible answers $$\mathcal{Z}$$, the predicted answer can be written as
 
-$
-hat{z}_t^H=argmax_{zinmathcal{Z}}p_l(zmid x_t).
-$
+$$
+\hat{z}_t^H=\arg\max_{z\in\mathcal{Z}} p_l(z\mid x_t).
+$$
 
 The robot first turns the situation into text. The LLM then gives a prediction about the human. The prediction can later be used by a robot planner.
 
 #### Three Prediction Tasks
 
-The paper evaluates this idea on three tasks. The tasks are different, so they test different parts of human modeling.
-
-| Dataset | Human quantity to predict | Main challenge |
-| --- | --- | --- |
-| MANNERS-DB | Social appropriateness of a robot action, rated from 1 to 5 | Physical and spatial context |
-| Trust-Transfer | Human trust after watching robot demonstrations, rated from 1 to 7 | Effect of interaction history |
-| SocialIQA | The most reasonable social response among three choices | Social commonsense reasoning |
+The paper evaluates this idea on the three datasets listed in the Experiment Setup. The tasks are different, so they test different parts of human modeling: MANNERS-DB depends on physical and spatial context, Trust-Transfer depends on the interaction history, and SocialIQA depends on social commonsense.
 
 #### MANNERS-DB: Social Appropriateness
 
@@ -533,7 +527,7 @@ The two planning case studies take one further step. They use the predicted huma
 
 The method still has clear limits. Language models are weak at some spatial, physical, and numerical details. A complete robot system therefore needs both an LLM-based human model and other models for perception, geometry, motion, and safety.
 
-## Discussion Questions:
+## Discussion Questions
 
 ### LESS is More: Rethinking Probabilistic Models of Human Behavior
 
@@ -543,6 +537,7 @@ The reason why we should consider trajectory similarity is that sometimes differ
 -   The authors used predefined feature vectors for computing trajectory similarity. Does this limit the performance of LESS? If so, how can we learn those features or extract them automatically?
 
 Yes, it can limit the performance of LESS because its ability to model human behavior depends on the definition. We can learn trajectory features using representation learning or human labeling. But this always comes with an additional cost.
+
 ### LLMs as Zero-Shot Human Models for Human-Robot Interaction
 
 -   Since LLMs are only used to predict human behavior, does it matter that these models perform poorly on spatial and numerical reasoning?
@@ -564,6 +559,6 @@ It is always tricky when some people will do things in a way that is unexpected 
 [//]: # ()
 [//]: # (This report is currently being prepared and will be updated by the student reporter team following the lecture session and classroom discussion. Please check back soon!)
 
-## Appendix:
+## Appendix
 
-Used GPT-6.1 Sol to transfer text into a Markdown file.
+For the Motivation, Background, and Less Model sections in the LESS is More paper, I wrote a Word document version of the report based on the slides and the recording. I then used GPT-6.1 Sol to convert the Word document into a Markdown file.
