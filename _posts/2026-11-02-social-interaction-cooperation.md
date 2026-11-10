@@ -305,6 +305,64 @@ In the motivation part, the presenters also showed a video where both robots wan
 
 Even with these limits, the presenters saw Social MDP as a good baseline. The next paper gets into studies with humans.
 
+## HABIT: Human-Aware Behavior and Interaction Training Dataset for Robot Manipulation
+
+### Motivation
+
+Large demonstration datasets helped robot policies generalize across tasks, scenes, and embodiments. However, these datasets are usually collected in human-absent settings, with the robot acting alone. Robots will be deployed in shared spaces such as homes and factories, where they need to follow cues, anticipate human motion, and avoid collisions. Training examples that omit these interactions provide little direct supervision for such behavior.
+
+A robot-only demonstration can show how to grasp a tool, but it cannot show the exchange with a person receiving it. Likewise, a robot-only workspace provides no example of pausing for a reaching hand. [HABIT](https://arxiv.org/abs/2606.31682) solves this issue by collecting manipulation demonstrations with a human present in the workspace.
+
+### Key ideas
+
+HABIT introduces human presence as a new axis of data diversity. Every episode has a co-present human sharing the workspace. Tasks are organized into three roles: Collaborator, Coworker, and Supervisor. Directed subtask graphs keep demonstrations consistent, and the collection protocol elicits reactive interaction, yielding, tempo variation, and gesture grounding. The paper evaluates the resulting data by fine-tuning two existing VLA models and comparing them with models trained on matched Robot-only demonstrations where that baseline is applicable.
+
+### Background
+
+Open X-Embodiment scales across robot platforms. DROID, BridgeData V2, and RH20T scale across scenes, tasks, and embodiments, while AgiBot World and RoboCOIN include bimanual, humanoid, and multi-platform data. Ego4D, Ego-Exo4D, and EgoVerse provide human egocentric video without paired robot actions. In class, a question about Ego4D clarified that it also has interaction splits. HABIT collects human-and-robot demonstrations with robot actions.
+
+A vision-language-action model (VLA) takes camera images, language instructions, and robot state as input and outputs an action chunk. It usually includes a pretrained VLM backbone and an action head. The two examples are π₀.₅ and GR00T N1.6. π₀.₅ uses a PaliGemma backbone with a SigLIP image encoder. GR00T N1.6 uses an Eagle-Block2A-2B-v2 VLM backbone and a diffusion-transformer action head trained with flow matching.
+
+HRI role taxonomies describe goal sharing, task sharing, and team hierarchy. HABIT adopts the Collaborator, Coworker, and Supervisor roles. In HARMONIC, the human teleoperates the robot as a tool for the assistive task. In LiHRA, the robot executes pre-scripted motions, and the data is used for safety-risk monitoring. HABIT records a robot perceiving and responding to an independent human with their own goals and actions.
+
+Collaborator tasks involve a joint task with direct physical interaction, such as a handover. Coworker tasks involve largely independent activities in a shared workspace, such as working at the cashier and making coffee, while avoiding collisions. In Supervisor tasks, the human directs and the robot executes, for example by following a pointing gesture. There are 20 tasks per role, with one human and one robot per episode.
+
+### Task workflow
+
+To keep demonstrations consistent across the roles, HABIT uses a task workflow. An instruction alone can be too ambiguous. For tasks such as 'clean the shelf with a duster together,' demonstrations can differ in how the subtasks are divided and ordered. The workflow is a directed graph whose nodes are human subtasks $$H_i$$ or robot subtasks $$R_i$$. Edges specify the order in which subtasks must happen. Both operators follow the plan during collection.
+
+{% include figure.liquid
+   path="assets/img/2026-11-02-social-interaction-cooperation/habit-workflows.png"
+   class="img-fluid rounded z-depth-1"
+   alt="Task workflows for Collaborator, Coworker, and Supervisor, with subtask graphs and corresponding human and robot views."
+   caption="Song et al. (2026), Figure 2, reproduced in slide 33. Task workflows for the three interaction roles, with human and robot subtask dependencies on the left and corresponding views on the right."
+   zoomable=true
+   avoid_scaling=true
+%}
+
+A single-agent edge connects two subtasks of the same agent, while a cross-agent edge connects a human subtask and a robot subtask. Collaborator and Supervisor workflows contain mostly cross-agent edges because robot steps depend on human steps. Coworker workflows contain mostly single-agent edges, with two independent subtask chains sharing the workspace.
+
+{% include figure.liquid
+   path="assets/img/2026-11-02-social-interaction-cooperation/habit-workflow-edges.png"
+   class="img-fluid rounded z-depth-1"
+   alt="Average counts of single-agent and cross-agent workflow edges per task for Collaborator, Coworker, and Supervisor roles."
+   caption="Song et al. (2026), Figure 4(a), reproduced in slide 34. Average numbers of single-agent and cross-agent workflow edges per task for the three roles."
+   zoomable=true
+   avoid_scaling=true
+%}
+
+### Principles
+
+There are two main principles of data collection. The first principle is reactive interaction. It uses a triggering cue. This is a visible human action that signals the start of the robot's next subtask. Examples include pointing at a bin, setting down a coaster, or holding out a cup. Both operators know the workflow, so the robot operator could start reaching for the bin before the human points. The robot then moves without a visible trigger in the demonstration.
+
+As a result, each operator acts only after observing the partner's behavior, with no talking, countdowns, or other signals that the cameras do not record. Behavior cloning learns to predict an action from the camera view $$o_t$$ and instruction $$\ell$$; the operator's memory is not part of that input.
+
+The second principle is to elicit human-aware behaviors. For safety-first yielding, the robot operator decisively retracts the arms when the robot is about to contact the human or a human-held object. The demonstrations record yielding as the default response rather than finishing the original trajectory.
+
+The human's movement speed is varied across episodes to encourage the policy to match the partner's tempo. For gesture grounding, the waiting time before the human points is sampled from predefined bins, such as 0, 1-5, 5-10, 10-20, and 20-30 seconds. This encourages the policy to wait for and read the gesture instead of acting from the language instruction alone.
+
+For diversification, clothing colors are varied, object order is randomized, and operators with different body types are included across tasks. These changes are intended to reduce reliance on incidental features of the human.
+
 ## Discussion Questions:
 
 * Social MDPs use a linear weight X on the other agent’s reward (negative means hinder, positive means help). Do you think there are real social behaviors can’t be captured by a linear weighting?
