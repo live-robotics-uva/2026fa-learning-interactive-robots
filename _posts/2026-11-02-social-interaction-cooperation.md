@@ -256,7 +256,54 @@ At level 0, the agent solves a regular MDP. At higher levels, it updates the oth
 
 ### Experiments
 
+**1. Setup** The experiments use a virtual 2-agent grid world <d-cite key="tejwani2022social"></d-cite>. There are six things in each scene: a red robot, a yellow robot, a red water bucket, a yellow water bucket, a tree, and a flower. A robot waters a plant by pushing a water bucket to it. The yellow robot pushes the yellow bucket twice as fast as the red bucket, and the red robot is the other way around. The physical goal is to water the plant by yourself, not just to have the plant watered.
+
+**2. Scenarios** The paper tests 98 scenarios. They cover:
+
+- the same or different physical goals for the two robots,
+- hinder, help, or neutral social goals,
+- a physical/social scaling factor of $$-2, -1, -0.5, 0, 0.5, 1,$$ or $$2$$.
+
+Negative values mean hindering and positive values mean helping. In class, the presenters explained a few of these values:
+
+- $$-2$$: very unhelpful.
+- $$0$$: the robot does not care about the other robot's physical goal at all.
+- $$0.5$$: it cares a little.
+- $$1$$: it weighs the physical and the social goal about the same.
+- $$2$$: very helpful.
+
+Each scenario is run with level 1 and level 2 reasoning, mainly from the point of view of the yellow robot. At level 1, the yellow robot assumes the red robot has a physical goal, but does not know its social goal. At level 2, the yellow robot also tries to guess the red robot's social goal.
+
+**3. Example** In the example from the slides, the red robot has the flower as its physical goal and a social goal of 2. The yellow robot has the tree as its physical goal and a social goal of 0. With level 1 reasoning, the yellow robot is a bit confused about what the red robot is trying to do. With level 2 reasoning, the yellow robot infers that the red robot is trying to help. It meets the red robot partway, so it does not have to take as many steps, and it finishes faster.
+
+In the motivation part, the presenters also showed a video where both robots want to water the tree and both want to hinder the other. When the yellow robot cannot model the red robot's social goal, it gets very close to watering the tree with the red bucket. Then it sees the red robot pushing the yellow bucket, and it does not understand that the red robot is pushing away the bucket that is easier for it to push. It chases after the red robot, and the red robot comes back and waters the tree first. When the yellow robot can model the red robot's social goal, it just pushes the red bucket right to the tree from the beginning.
+
+**4. Human evaluation** Twelve human subjects watched the videos of all scenarios at both levels, $$98 \times 2 = 196$$ videos. They rated what they saw as the robots' physical and social goals. These ratings were compared with the estimates of the yellow robot in Social MDP, and with two baselines: inverse planning and a cue-based model. The cue-based model is basically a supervised learning approach. Because this is a virtual environment, the ground truth goals are also known.
+
+**5. Results**
+
+- Social MDP matches humans well. Its correlation with the human ratings is high, while the two baselines do pretty poorly.
+- Looking at each time step, at the beginning nobody is really sure what is happening. As more steps are seen, the estimates lean toward one answer. In the example shown, the physical goal is probably the flower, and the social goal moves toward hindering the yellow robot.
+- For the social goal, the human scores and Social MDP are much closer to the ground truth than inverse planning and the cue-based model.
+- For the physical goal alone, the presenters noted that inverse planning seems to do better.
+
 ### Conclusion
+
+**Overall findings**
+
+- Social MDP does zero-shot social recognition and planning. In comparison, the cue-based model needs supervision.
+- It has a strong alignment with the human mental model, as shown by the human study.
+- As the instructor said at the start of the lecture, the idea of this paper is that a mathematical formulation lets social concepts like helping or hindering transfer to new situations, without relearning the underlying mechanism.
+
+**Limitations**
+
+- The environment is a simple virtual environment and is fully observable. The paper does not use the partially observable version.
+- All goals are predefined, which is not what we would see in the real world, where people's goals may change.
+- There is a limited number of agents and environment objects, so it is not as noisy as the real world.
+- At each step, the model has to enumerate all possible physical and social goals, recursively. The presenters pointed out that this becomes very complicated, and likely intractable, in a real-world scenario. Approximations would be needed, for example sampling possible goals or using a neural network.
+- It was not tested with humans.
+
+Even with these limits, the presenters saw Social MDP as a good baseline. The next paper gets into studies with humans.
 
 ## Discussion Questions:
 
