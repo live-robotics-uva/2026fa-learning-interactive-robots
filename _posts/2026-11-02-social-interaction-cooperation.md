@@ -10,11 +10,20 @@ ready: false
 # Reporter team authors
 authors:
   - name: "Pei-Chi Chen"
+    affiliations:
+    - name: "University of Virginia"
   - name: "Yuezhang Chen"
+    affiliations:
+    - name: "University of Virginia"
   - name: "Junyan Huang"
+    affiliations:
+    - name: "University of Virginia"
   - name: "Yi Ping"
+    affiliations:
+    - name: "University of Virginia"
   - name: "Yiqun Yin"
-
+    affiliations:
+    - name: "University of Virginia"
 bibliography: 2026-11-02-social-interaction-cooperation.bib
 
 toc:
@@ -363,7 +372,51 @@ The human's movement speed is varied across episodes to encourage the policy to 
 
 For diversification, clothing colors are varied, object order is randomized, and operators with different body types are included across tasks. These changes are intended to reduce reliance on incidental features of the human.
 
-## Discussion Questions:
+### Setup
+#### Workspace setup
+The authors used a a bimanual robot with two Franka Research 3 arms and Robotiq grippers teleoperated with Meta Quest 3 controllers (DROID-based). The front table was shared between humans and the robot, while the side table was only used by humans. Five synced RGB cameras (640×480 at 10 Hz) were used, in which two wrist (125° FoV) and one center (100°) on the robot side, while for the human side, one head-mounted and one exocentric cameras were used. The training process used only the 3 robot-side views; all 5 are released.
+
+The following points show an overview of HABIT:
+- 10,563 episodes, 164 hours of bimanual manipulation;
+- 60 tasks, 20 per role. (Episodes: Collaborator 3,198; Coworker 3,969; Supervisor 3,396);
+- 308 unique human–robot pairs: 157 robot + 182 human subtasks (Both human and robot subtasks are annotated);
+- Avg. 3.67 robot and 4.30 human subtasks per episode;
+- Mean episode length 59.9 s.
+
+#### Measuring success with a human present
+Each robot subtask is scored on three binary criteria. The first metric measures whether the robot reaches the intended object state (manipulation score); the second metric measures whether states are reached in a correct order and synchronized timing, and whether it follows the cues (workflow compliance); the last metric measures whether the robot has contact with the human or human-held objects (human safety score). A trial $\tau$ succeeds if every robot subtask passes all three.
+
+#### Experimental Setup
+The **goal** of the experiment is to evaluate if the HABIT dataset improves task success rates and elicits human-aware behaviors (as compared to conventional data), so the authors tested two **fine-tuned, open-source VLA models**. They chose a “Robot-only” baseline for comparison: aka demos collected using the same task and environment as HABIT, minus the human operator. All models were tested on a subset of six tasks spanning 3 interaction roles: Collaborator, Coworker, and Supervisor.
+
+
+### Results
+The authors derived the following interesting findings from the experiment results. First, training on HABIT improved task success rates over the robot-only baseline on every comparable task for both VLAs, which validates the effectiveness of their method. Among these, **the most significant gains** occurred in Coworker tasks, where (the authors claimed) models learned reactive yielding to resolve path conflicts in overlapping workspaces. Second, they revealed a pattern that HABIT allowed the models to successfully use the human’s pointing gesture as a co-located visual cue during complex, two-stage Supervisor tasks. For example, in the “food storage” task (requiring the human pointing gesture correlating to the robot choosing the correct container) models outperformed those trained on robot-only data. They also uncovered a reduction in pointing failures for HABIT.
+
+#### Failure Analysis
+Experiments identified that failure modes in shared environments extend beyond simple manipulation errors and are tied to the human’s role:
+- Precondition violations (box packaging)
+- Collisions in the shared workspace (donut serving)
+- Gesture-following failures (food storage)
+Accordingly, the authors found where HABIT makes improvement: training on HABIT substantially reduced these role-specific failures by teaching models to sync tasks with their human collaborators, yield to avoid collisions, and follow gestures.
+
+#### Sample-Efficient Adaptation to New Tasks
+In addition to the above experiments, the authors tested whether training on HABIT creates a strong prior for learning new human-robot interaction tasks, by fine-tuning the model on completely new tasks using limited demo budges (50, 100, and 200 episodes). The resutls show that mid-training on HABIT consistently achieved higher success rates with fewer demos than direct fine-tuning, and mid-training with 100 demos surpassed the performance of direct fine-tuning at the max 200-demo budget on both tasks (Shelf cleaning and waste sorting).
+
+#### Out-of-Distribution (OOD) Robustness
+The experiments also validate the robustness to OOD cases of training on HABIT. Specifically, "robust" here means deployed robots must be able to adapt to humans with different appearances from the original data collectors. Therefore, they assessed models against human distribution shifts, and found that core human-aware behaviors remained largely stable, while models’ ability to ground pointing gestures was more sensitive under OOD-human appearance.
+
+
+### Limitations
+We summarized the following limitations of this study according to the presentation.
+- **Environmental scope**: All demos were recorded in a single environment.
+- The study does not discuss **human operator diversity** and its impact.
+- **Workspace density**: Interactions are limited to one human present.
+- **Camera utilization**: We cannot expect humans to walk around with head-mounted cameras constantly.
+- **Evaluation reproducibility**: For the experiments, it is difficult to exactly reproduce conditions of original experiment due to dynamics of real-world robot evaluation.
+
+
+### Discussion Questions:
 
 * Social MDPs use a linear weight X on the other agent’s reward (negative means hinder, positive means help). Do you think there are real social behaviors can’t be captured by a linear weighting?
 
