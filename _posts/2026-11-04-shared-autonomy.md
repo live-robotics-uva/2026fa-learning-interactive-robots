@@ -19,6 +19,9 @@ toc:
   - name: "Shared Autonomy with Learned Latent Actions"
   - name: "Comparison and Key Takeaways"
   - name: "Open Questions and Discussion"
+    subsections:
+      - name: "Discussion 1: Human vs. Robot Control During Accidents"
+      - name: "Discussion 2: Shared Autonomy in Assistive Robots for Older Adults"
   - name: "References"
 ---
 
@@ -197,6 +200,18 @@ The lecture concluded with questions about when assistance becomes over-assistan
 5. How would the systems scale to unfamiliar intents, reactive opponents, new objects, or users whose control patterns vary substantially from training data?
 
 A natural direction is to combine the two ideas: use a predictive model to maintain uncertainty over human objectives **and** a latent control interface designed to preserve controllable escape routes when that uncertainty is wrong. Such a system would not treat confidence as permission to eliminate alternatives; it would learn to assist while remaining corrigible to the user's next action.
+
+### Discussion 1: Human vs. Robot Control During Accidents
+
+Our first discussion focused on **when an autonomous vehicle should transfer control to a human driver, particularly in situations involving unavoidable or imminent accidents**. Some participants argued that control should be returned to the human because people might be able to exercise judgment, improvise, or at least minimize the damage. Others suggested that the autonomous system should remain in control because robots can process sensor information and react faster than humans, especially in emergencies where delayed reactions can make the situation worse. An unexpected handover could also be dangerous if the human does not have enough time to understand the situation and respond appropriately.
+
+We concluded that **the appropriate allocation of control depends heavily on the specific scenario**, rather than following a universal rule. Important considerations include the time remaining before a collision, the driver's awareness, the reliability of the autonomous system, and whether either party can realistically improve the outcome. This connects to *Dreaming to Assist*, which emphasizes understanding human intent while maintaining safe and effective assistance. One possible approach is for the autonomous system to handle immediate safety-critical corrections while allowing meaningful human intervention whenever sufficient time and information are available. However, the paper's experiments were conducted in simplified racing simulations, so its findings do not establish how control should be transferred during real-world traffic emergencies.
+
+### Discussion 2: Shared Autonomy in Assistive Robots for Older Adults
+
+Our second discussion appears to have concerned **how much autonomy assistive robots should have when helping older adults or people with limited physical abilities perform everyday tasks**. The presentation used robotic feeding as an example, where a user controls a high-dimensional robotic arm through a relatively simple joystick. The paper *Shared Autonomy with Learned Latent Actions* demonstrated how robots can interpret limited human inputs and translate them into more complex movements, including reaching toward food and performing precise actions such as cutting, stabbing, or scooping. This raises a fundamental tradeoff between improving task efficiency through automation and preserving the user's ability to control the robot according to their own preferences.
+
+A primary concern is that excessive robotic assistance may reduce human agency, particularly when the robot incorrectly predicts what the person wants. For example, a feeding robot might assume that the user wants to pick up a particular food item and continue moving toward it even after the user attempts to change direction. Conversely, requiring complete manual control could be physically demanding and frustrating. The slides suggest that effective shared autonomy should adapt assistance to the person's abilities, confidence, and changing intentions while keeping alternative actions accessible. The broader question is therefore not simply whether robots should perform more tasks autonomously, but **how they can provide useful assistance without unnecessarily restricting human choice, independence, and dignity**.
 
 ## References
 
