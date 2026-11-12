@@ -5,7 +5,7 @@ description: "Multi-agent coordination, game-theoretic formulations of human-rob
 date: 2026-11-02
 future: true
 htmlwidgets: true
-ready: false
+ready: true
 
 # Reporter team authors
 authors:
