@@ -450,9 +450,3 @@ collaborative tasks?
    
    VLAs provide a strong perception-to-action foundation, but often lack explicit representations of a
    human partner, task state, and temporal preconditions.
-
---
-
-### Report Status
-
-This report is currently being prepared and will be updated by the student reporter team following the lecture session and classroom discussion. Please check back soon!
