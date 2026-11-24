@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 360" width="720" height="360" font-family="Helvetica, Arial, sans-serif">
+  <rect width="720" height="360" fill="#ffffff"/>
+  <text x="360" y="26" font-size="15" fill="#111" text-anchor="middle" font-weight="bold">What a robot query can mean for one episode</text>
+  <!-- column headers -->
+  <text x="265" y="62" font-size="14" fill="#333" text-anchor="middle" font-weight="bold">Episode would FAIL</text>
+  <text x="455" y="62" font-size="14" fill="#333" text-anchor="middle" font-weight="bold">Episode would SUCCEED</text>
+  <!-- row headers -->
+  <text x="150" y="130" font-size="14" fill="#333" text-anchor="end" font-weight="bold">Robot</text>
+  <text x="150" y="148" font-size="14" fill="#333" text-anchor="end" font-weight="bold">queries</text>
+  <text x="150" y="260" font-size="14" fill="#333" text-anchor="end" font-weight="bold">Robot does</text>
+  <text x="150" y="278" font-size="14" fill="#333" text-anchor="end" font-weight="bold">not query</text>
+  <!-- cells -->
+  <rect x="170" y="80" width="190" height="120" fill="#c8e6c9" stroke="#fff" stroke-width="3"/>
+  <text x="265" y="115" font-size="16" fill="#1b5e20" text-anchor="middle" font-weight="bold">True positive</text>
+  <text x="265" y="138" font-size="13" fill="#1b5e20" text-anchor="middle">Asked for help</text>
+  <text x="265" y="155" font-size="13" fill="#1b5e20" text-anchor="middle">and needed it.</text>
+  <rect x="360" y="80" width="190" height="120" fill="#fff3c4" stroke="#fff" stroke-width="3"/>
+  <text x="455" y="115" font-size="16" fill="#8a6d00" text-anchor="middle" font-weight="bold">False positive</text>
+  <text x="455" y="138" font-size="13" fill="#8a6d00" text-anchor="middle">Asked, but would have</text>
+  <text x="455" y="155" font-size="13" fill="#8a6d00" text-anchor="middle">succeeded. Wastes effort.</text>
+  <rect x="170" y="200" width="190" height="120" fill="#ffcdd2" stroke="#fff" stroke-width="3"/>
+  <text x="265" y="235" font-size="16" fill="#b71c1c" text-anchor="middle" font-weight="bold">False negative</text>
+  <text x="265" y="258" font-size="13" fill="#b71c1c" text-anchor="middle">Did not ask, then failed.</text>
+  <text x="265" y="275" font-size="13" fill="#b71c1c" text-anchor="middle">The costly mistake.</text>
+  <rect x="360" y="200" width="190" height="120" fill="#c8e6c9" stroke="#fff" stroke-width="3"/>
+  <text x="455" y="235" font-size="16" fill="#1b5e20" text-anchor="middle" font-weight="bold">True negative</text>
+  <text x="455" y="258" font-size="13" fill="#1b5e20" text-anchor="middle">Stayed independent</text>
+  <text x="455" y="275" font-size="13" fill="#1b5e20" text-anchor="middle">and succeeded.</text>
+</svg>

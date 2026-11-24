@@ -1,7 +1,100 @@
-@article{knox2009interactively,
-  title={Interactively shaping agents via human reinforcement: The TAMER framework},
-  author={Knox, W Bradley and Stone, Peter},
-  journal={KDD},
-  pages={9--18},
-  year={2009}
+@misc{lee_diff-dagger_2025,
+	title = {Diff-{DAgger}: Uncertainty Estimation with Diffusion Policy for Robotic Manipulation},
+	url = {http://arxiv.org/abs/2410.14868},
+	doi = {10.48550/arXiv.2410.14868},
+	shorttitle = {Diff-{DAgger}},
+	abstract = {Recently, diffusion policy has shown impressive results in handling multi-modal tasks in robotic manipulation. However, it has fundamental limitations in out-of-distribution failures that persist due to compounding errors and its limited capability to extrapolate. One way to address these limitations is robot-gated {DAgger}, an interactive imitation learning with a robot query system to actively seek expert help during policy rollout. While robot-gated {DAgger} has high potential for learning at scale, existing methods like Ensemble-{DAgger} struggle with highly expressive policies: They often misinterpret policy disagreements as uncertainty at multi-modal decision points. To address this problem, we introduce Diff-{DAgger}, an efficient robot-gated {DAgger} algorithm that leverages the training objective of diffusion policy. We evaluate Diff-{DAgger} across different robot tasks including stacking, pushing, and plugging, and show that Diff-{DAgger} improves the task failure prediction by 39.0\%, the task completion rate by 20.6\%, and reduces the wall-clock time by a factor of 7.8. We hope that this work opens up a path for efficiently incorporating expressive yet data-hungry policies into interactive robot learning settings. The project website is available at: https://diffdagger.github.io.},
+	number = {{arXiv}:2410.14868},
+	publisher = {{arXiv}},
+	author = {Lee, Sung-Wook and Kang, Xuhui and Kuo, Yen-Ling},
+	urldate = {2026-11-22},
+	date = {2025-03-24},
+	year = {2025},
+	eprinttype = {arxiv},
+	eprint = {2410.14868 [cs.RO]},
+	keywords = {Computer Science - Robotics},
+}
+
+@inproceedings{ross_reduction_2011,
+	title = {A Reduction of Imitation Learning and Structured Prediction to No-Regret Online Learning},
+	author = {Ross, Stéphane and Gordon, Geoffrey and Bagnell, Drew},
+	booktitle = {Proceedings of the Fourteenth International Conference on Artificial Intelligence and Statistics ({AISTATS})},
+	series = {JMLR Workshop and Conference Proceedings},
+	pages = {627--635},
+	year = {2011},
+	url = {https://proceedings.mlr.press/v15/ross11a.html},
+}
+
+@inproceedings{hoque_fleet-dagger_2023,
+	title = {Fleet-{DAgger}: Interactive Robot Fleet Learning with Scalable Human Supervision},
+	author = {Hoque, Ryan and Chen, Lawrence Yunliang and Sharma, Satvik and Dharmarajan, Karthik and Thananjeyan, Brijen and Abbeel, Pieter and Goldberg, Ken},
+	booktitle = {Conference on Robot Learning ({CoRL})},
+	pages = {368--380},
+	year = {2023},
+	url = {https://proceedings.mlr.press/v205/hoque23a.html},
+}
+
+@inproceedings{menda_ensembledagger_2019,
+	title = {{EnsembleDAgger}: A Bayesian Approach to Safe Imitation Learning},
+	author = {Menda, Kunal and Driggs-Campbell, Katherine and Kochenderfer, Mykel J.},
+	booktitle = {2019 {IEEE/RSJ} International Conference on Intelligent Robots and Systems ({IROS})},
+	publisher = {IEEE},
+	pages = {5041--5048},
+	year = {2019},
+	doi = {10.1109/IROS40897.2019.8968287},
+	url = {https://arxiv.org/abs/1807.08364},
+}
+
+@inproceedings{ross_efficient_2010,
+	title = {Efficient Reductions for Imitation Learning},
+	author = {Ross, Stéphane and Bagnell, Drew},
+	booktitle = {Proceedings of the Thirteenth International Conference on Artificial Intelligence and Statistics ({AISTATS})},
+	series = {JMLR Workshop and Conference Proceedings},
+	pages = {661--668},
+	year = {2010},
+	url = {https://proceedings.mlr.press/v9/ross10a.html},
+}
+
+@inproceedings{kelly_hg-dagger_2019,
+	title = {{HG-DAgger}: Interactive Imitation Learning with Human Experts},
+	author = {Kelly, Michael and Sidrane, Chelsea and Driggs-Campbell, Katherine and Kochenderfer, Mykel J.},
+	booktitle = {2019 International Conference on Robotics and Automation ({ICRA})},
+	publisher = {IEEE},
+	pages = {8077--8083},
+	year = {2019},
+	doi = {10.1109/ICRA.2019.8793698},
+	url = {https://arxiv.org/abs/1810.02890},
+}
+
+@inproceedings{ren_robots_2023,
+	title = {Robots That Ask For Help: Uncertainty Alignment for Large Language Model Planners},
+	author = {Ren, Allen Z. and Dixit, Anushri and Bodrova, Alexandra and Singh, Sumeet and Tu, Stephen and Brown, Noah and Xu, Peng and Takayama, Leila and Xia, Fei and Varley, Jake and Xu, Zhenjia and Sadigh, Dorsa and Zeng, Andy and Majumdar, Anirudha},
+	booktitle = {Conference on Robot Learning ({CoRL})},
+	year = {2023},
+	url = {https://arxiv.org/abs/2307.01928},
+}
+
+@inproceedings{ahn_saycan_2022,
+	title = {Do As I Can, Not As I Say: Grounding Language in Robotic Affordances},
+	author = {Ahn, Michael and Brohan, Anthony and Brown, Noah and Chebotar, Yevgen and Cortes, Omar and David, Byron and Finn, Chelsea and Fu, Chuyuan and Gopalakrishnan, Keerthana and Hausman, Karol and Herzog, Alex and Ho, Daniel and Hsu, Jasmine and Ibarz, Julian and Ichter, Brian and Irpan, Alex and Jang, Eric and Ruano, Rosario Jauregui and Jeffrey, Kyle and Jesmonth, Sally and Joshi, Nikhil J. and Julian, Ryan and Kalashnikov, Dmitry and Kuang, Yuheng and Lee, Kuang-Huei and Levine, Sergey and Lu, Yao and Luu, Linda and Parada, Carolina and Pastor, Peter and Quiambao, Jornell and Rao, Kanishka and Rettinghouse, Jarek and Reyes, Diego and Sermanet, Pierre and Sievers, Nicolas and Tan, Clayton and Toshev, Alexander and Vanhoucke, Vincent and Xia, Fei and Xiao, Ted and Xu, Peng and Xu, Sichun and Yan, Mengyuan and Zeng, Andy},
+	booktitle = {Conference on Robot Learning ({CoRL})},
+	year = {2022},
+	url = {https://arxiv.org/abs/2204.01691},
+}
+
+@inproceedings{huang_inner_2022,
+	title = {Inner Monologue: Embodied Reasoning through Planning with Language Models},
+	author = {Huang, Wenlong and Xia, Fei and Xiao, Ted and Chan, Harris and Liang, Jacky and Florence, Pete and Zeng, Andy and Tompson, Jonathan and Mordatch, Igor and Chebotar, Yevgen and Sermanet, Pierre and Brown, Noah and Jackson, Tomas and Luu, Linda and Levine, Sergey and Hausman, Karol and Ichter, Brian},
+	booktitle = {Conference on Robot Learning ({CoRL})},
+	year = {2022},
+	url = {https://arxiv.org/abs/2207.05608},
+}
+
+@misc{kumar_conformal_2023,
+	title = {Conformal Prediction with Large Language Models for Multi-Choice Question Answering},
+	author = {Kumar, Bhawesh and Lu, Charlie and Gupta, Gauri and Palepu, Anil and Bellamy, David and Raskar, Ramesh and Beam, Andrew},
+	year = {2023},
+	publisher = {arXiv},
+	url = {https://arxiv.org/abs/2305.18404},
+	note = {arXiv:2305.18404 [cs.CL]},
 }
